@@ -1,0 +1,16 @@
+.question{
+    background: linear-gradient(transparent 60%, yellow 0%);
+    display: inline-block;
+}
+.choice{
+    font-weight: bold;
+    border-style: solid;
+    border-color: gray;
+    padding: 10px;
+    display: block;
+    width: 40%;
+    margin: 10px 0;
+}
+.image{
+    display: block;
+}
