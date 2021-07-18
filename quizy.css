@@ -1,15 +1,28 @@
-.question{
-    background: linear-gradient(transparent 60%, yellow 0%);
-    display: inline-block;
-}
 .choice{
-    font-weight: bold;
+    font-weight: 600;
     border-style: solid;
-    border-color: gray;
-    padding: 10px;
+    border-color: #ebebeb;
+    padding: 13px;
     display: block;
     width: 40%;
     margin: 10px 0;
+    cursor: pointer;
+}
+.failed1{
+    background: #ff5128;
+    color: #fff;
+}
+.failed2{
+    background: #ff5128;
+    color: #fff;
+}
+.succeed{
+    background: #287dff;
+    color: #fff;
+}
+.question{
+    background: linear-gradient(transparent 60%, yellow 0%);
+    display: inline-block;
 }
 .image{
     display: block;
