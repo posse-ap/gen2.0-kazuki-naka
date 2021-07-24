@@ -1,4 +1,4 @@
-li{
+.choice{
     font-weight: 600;
     border-style: solid;
     border-color: #ebebeb;
@@ -7,15 +7,16 @@ li{
     width: 40%;
     margin: 10px 0;
     cursor: pointer;
+    box-shadow: 0 3px 2px -2px rgb(0 0 0 / 13%);
 }
-.failed1{
+.failed{
     background: #ff5128;
     color: #fff;
 }
-.failed2{
+/* .failed2{
     background: #ff5128;
     color: #fff;
-}
+} */
 .succeed{
     background: #287dff;
     color: #fff;
@@ -24,7 +25,7 @@ li{
     background: linear-gradient(transparent 60%, yellow 0%);
     display: inline-block;
 }
-.correct-answer{
+.correctAnswer{
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;
@@ -33,7 +34,7 @@ li{
     display: inline-block;
     border-bottom: 3px solid #287dff;
 }
-.incorrect-answer{
+.incorrectAnswer{
     font-size: 16px;
     line-height: 20px;
     font-weight: 600;
@@ -42,17 +43,13 @@ li{
     display: inline-block;
     border-bottom: 3px solid #ff5128;    
 }
-.answer-description1{
+.answerDescription{
     font-size: 100%;
     font: inherit;
     vertical-align: baseline;
 }
-.answer-description2{
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;  
-}
-.resultbox{
+
+.resultBox{
     background: #f5f5f5;
     padding: 17px;
     width: 40%;
