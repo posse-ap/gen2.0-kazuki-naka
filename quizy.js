@@ -29,19 +29,19 @@ const pictures = [
 
 
 for (let i = 0 ; i < choices.length ; i++ ){
-    let quizySet = '<div class="quizyContainer">'
+    let quizySet = '<div class="quizy-container">'
                     + `<h2 class="question">${i+1}.この地名はなんて読む？</h2>`
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class="image">`
                     + `<li class="choice" id="true${i+1}">${choices[i][0]}</li>`
                     + `<li class="choice" id="false${i+1}-1">${choices[i][1]}</li>`
                     + `<li class="choice" id="false${i+1}-2">${choices[i][2]}</li>`
-                    + `<div class="resultBox" id="correctbox${i+1}">`
-                    + `<p class="correctAnswer" id="result${i+1}-1"></p>`
-                    + `<p class="answerDescription" id="description${i+1}-1"></p>`
+                    + `<div class="result-box" id="correctbox${i+1}">`
+                    + `<p class="correct-answer" id="result${i+1}-1"></p>`
+                    + `<p class="answer-description" id="description${i+1}-1"></p>`
                     + '</div>'
-                    + `<div class="resultBox" id="incorrectbox${i+1}">`
-                    + `<p class="incorrectAnswer" id="result${i+1}-2"></p>`
-                    + `<p class="answerDescription" id="description${i+1}-2"></p>`
+                    + `<div class="result-box" id="incorrectbox${i+1}">`
+                    + `<p class="incorrect-answer" id="result${i+1}-2"></p>`
+                    + `<p class="answer-description" id="description${i+1}-2"></p>`
                     + '</div>'
                     + '</div>';
 
