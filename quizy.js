@@ -7,7 +7,7 @@ const choices = [
     ["おなりもん","おかどもん","ごせいもん"],
     ["とどろき","たたら","たたりき"],
     ["しゃくじい","せきこうい","いじい"],
-    ["ざっしょく","ぞうしき","ざっしき"],
+    ["ぞうしき","ざっしょく","ざっしき"],
     ["おかちまち","ごしろちょう","みとちょう"],
     ["ししぼね","ろっこつ","しこね"],
     ["こぐれ","こしゃく","こばく"],
@@ -26,15 +26,21 @@ const pictures = [
     ["https://d1khcm40x1j0f.cloudfront.net/words/34508ddb0789ee73471b9f17977e7c9c.png","小榑"],
 ];
 
-
+function shuffle(arr){
+    for (let i = arr.length - 1;i > 0;i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[j],arr[i]] = [arr[i],arr[j]];
+    }
+    return arr;
+}
 
 for (let i = 0 ; i < choices.length ; i++ ){
+    const shuffleChoices = shuffle([...choices[i]]);
     let quizySet = '<div class="quizy-container">'
                     + `<h2 class="question">${i+1}.この地名はなんて読む？</h2>`
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class="image">`
-                    + `<li class="choice" id="true${i+1}">${choices[i][0]}</li>`
-                    + `<li class="choice" id="false${i+1}-1">${choices[i][1]}</li>`
-                    + `<li class="choice" id="false${i+1}-2">${choices[i][2]}</li>`
+                    + `<ul class="quizy-selection" id="selection${i+1}">`
+                    + '</ul>'
                     + `<div class="result-box" id="correctbox${i+1}">`
                     + `<p class="correct-answer" id="result${i+1}-1"></p>`
                     + `<p class="answer-description" id="description${i+1}-1"></p>`
@@ -46,6 +52,26 @@ for (let i = 0 ; i < choices.length ; i++ ){
                     + '</div>';
 
     document.write(quizySet);
+
+    shuffleChoices.forEach(shuffleChoice => {
+        const selection = document.getElementById(`selection${i+1}`);
+        const li = document.createElement('li');
+        li.className = 'choice';
+        li.textContent = shuffleChoice;
+        switch(shuffleChoice){
+            case `${choices[i][0]}`:
+                li.id = `true${i+1}`;
+                break;
+            case `${choices[i][1]}`:
+                li.id = `false${i+1}-1`;
+                break;
+            default:
+                li.id = `false${i+1}-2`;
+        }
+        selection.appendChild(li);
+    })
+
+
     const truth = document.getElementById(`true${i+1}`);
     const false1 = document.getElementById(`false${i+1}-1`);
     const false2 = document.getElementById(`false${i+1}-2`);
@@ -55,35 +81,71 @@ for (let i = 0 ; i < choices.length ; i++ ){
     const resultbox2 = document.getElementById(`result${i+1}-2`);
     const description1 = document.getElementById(`description${i+1}-1`);
     const description2 = document.getElementById(`description${i+1}-2`);
+
+    if (i == 8){
+        truth.addEventListener('click',() =>{
+            truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
+            correctbox.style.display = 'block'; //正解表示
+            resultbox1.textContent = '正解！';
+            description1.textContent = '江戸川区にあります。';
+            description1.scrollIntoView({behavior: 'smooth', block: 'center'});
+            false1.classList.add('notclick');
+            false2.classList.add('notclick');
+        });
     
-    truth.addEventListener('click',() =>{
-        truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
-        correctbox.style.display = 'block'; //正解表示
-        resultbox1.textContent = '正解！';
-        description1.textContent = `正解は「${choices[i][0]}」です！`;
-        false1.classList.add('notclick');
-        false2.classList.add('notclick');
-    });
-
-    false1.addEventListener('click',() => {
-        false1.classList.add('failed'); //背景が赤、文字が白に変化
-        incorrectbox.style.display = 'block'; //正解表示
-        resultbox2.textContent = '不正解！';
-        description2.textContent = `正解は「${choices[i][0]}」です！`;
-        truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
-        false2.classList.add('notclick'); 
-        truth.classList.add('notclick'); //他の選択肢のクリック無効化
-    });
-
-    false2.addEventListener('click',() => {
-        false2.classList.add('failed'); //背景が赤、文字が白に変化
-        incorrectbox.style.display = 'block'; //正解表示
-        resultbox2.textContent = '不正解！';
-        description2.textContent = `正解は「${choices[i][0]}」です！`;
-        truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
-        false1.classList.add('notclick'); 
-        truth.classList.add('notclick'); //他の選択肢のクリック無効化
-    });
+        false1.addEventListener('click',() => {
+            false1.classList.add('failed'); //背景が赤、文字が白に変化
+            incorrectbox.style.display = 'block'; //正解表示
+            resultbox2.textContent = '不正解！';
+            description2.textContent = '江戸川区にあります。';
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
+            false2.classList.add('notclick'); 
+            truth.classList.add('notclick'); //他の選択肢のクリック無効化
+        });
     
+        false2.addEventListener('click',() => {
+            false2.classList.add('failed'); //背景が赤、文字が白に変化
+            incorrectbox.style.display = 'block'; //正解表示
+            resultbox2.textContent = '不正解！';
+            description2.textContent = '江戸川区にあります。';
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
+            false1.classList.add('notclick'); 
+            truth.classList.add('notclick'); //他の選択肢のクリック無効化
+        });
 
+    }else{
+        truth.addEventListener('click',() =>{
+            truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
+            correctbox.style.display = 'block'; //正解表示
+            resultbox1.textContent = '正解！';
+            description1.textContent = `正解は「${choices[i][0]}」です！`;
+            description1.scrollIntoView({behavior: 'smooth', block: 'center'});
+            false1.classList.add('notclick');
+            false2.classList.add('notclick');
+        });
+    
+        false1.addEventListener('click',() => {
+            false1.classList.add('failed'); //背景が赤、文字が白に変化
+            incorrectbox.style.display = 'block'; //正解表示
+            resultbox2.textContent = '不正解！';
+            description2.textContent = `正解は「${choices[i][0]}」です！`;
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
+            false2.classList.add('notclick'); 
+            truth.classList.add('notclick'); //他の選択肢のクリック無効化
+        });
+    
+        false2.addEventListener('click',() => {
+            false2.classList.add('failed'); //背景が赤、文字が白に変化
+            incorrectbox.style.display = 'block'; //正解表示
+            resultbox2.textContent = '不正解！';
+            description2.textContent = `正解は「${choices[i][0]}」です！`;
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
+            false1.classList.add('notclick'); 
+            truth.classList.add('notclick'); //他の選択肢のクリック無効化
+        });
+    };
 }
