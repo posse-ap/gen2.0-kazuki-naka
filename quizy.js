@@ -26,6 +26,7 @@ const pictures = [
     ["https://d1khcm40x1j0f.cloudfront.net/words/34508ddb0789ee73471b9f17977e7c9c.png","小榑"],
 ];
 
+//シャッフル関数
 function shuffle(arr){
     for (let i = arr.length - 1;i > 0;i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -35,7 +36,7 @@ function shuffle(arr){
 }
 
 for (let i = 0 ; i < choices.length ; i++ ){
-    const shuffleChoices = shuffle([...choices[i]]);
+    const shuffleChoices = shuffle([...choices[i]]); //シャッフルした選択肢を要素とする新たな配列
     let quizySet = '<div class="quizy-container">'
                     + `<h2 class="question">${i+1}.この地名はなんて読む？</h2>`
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class="image">`
@@ -50,9 +51,10 @@ for (let i = 0 ; i < choices.length ; i++ ){
                     + `<p class="answer-description" id="description${i+1}-2"></p>`
                     + '</div>'
                     + '</div>';
-
+             
     document.write(quizySet);
 
+    //ulに子要素であるliを追加して中身をシャッフルした選択肢にする&各選択肢に適切なclassとidをつける
     shuffleChoices.forEach(shuffleChoice => {
         const selection = document.getElementById(`selection${i+1}`);
         const li = document.createElement('li');
@@ -75,22 +77,23 @@ for (let i = 0 ; i < choices.length ; i++ ){
     const truth = document.getElementById(`true${i+1}`);
     const false1 = document.getElementById(`false${i+1}-1`);
     const false2 = document.getElementById(`false${i+1}-2`);
-    const correctbox = document.getElementById(`correctbox${i+1}`);
-    const incorrectbox = document.getElementById(`incorrectbox${i+1}`);
-    const resultbox1 = document.getElementById(`result${i+1}-1`);
-    const resultbox2 = document.getElementById(`result${i+1}-2`);
-    const description1 = document.getElementById(`description${i+1}-1`);
-    const description2 = document.getElementById(`description${i+1}-2`);
+    const correctbox = document.getElementById(`correctbox${i+1}`); //正解の際に表示されるボックス
+    const incorrectbox = document.getElementById(`incorrectbox${i+1}`); //不正解の際に表示されるボックス
+    const resultbox1 = document.getElementById(`result${i+1}-1`); //「正解!」を表示する部分
+    const resultbox2 = document.getElementById(`result${i+1}-2`); //「不正解！」を表示する部分
+    const description1 = document.getElementById(`description${i+1}-1`); //正解の場合に表示される説明文
+    const description2 = document.getElementById(`description${i+1}-2`); //不正解の場合に表示される説明文
 
+    //鹿骨だけは正解表示が異なるため条件分岐する
     if (i == 8){
-        truth.addEventListener('click',() =>{
+        truth.addEventListener('click',() => {
             truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
             correctbox.style.display = 'block'; //正解表示
             resultbox1.textContent = '正解！';
             description1.textContent = '江戸川区にあります。';
-            description1.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description1.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             false1.classList.add('notclick');
-            false2.classList.add('notclick');
+            false2.classList.add('notclick'); //他の選択肢のクリック無効化
         });
     
         false1.addEventListener('click',() => {
@@ -98,7 +101,7 @@ for (let i = 0 ; i < choices.length ; i++ ){
             incorrectbox.style.display = 'block'; //正解表示
             resultbox2.textContent = '不正解！';
             description2.textContent = '江戸川区にあります。';
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false2.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
@@ -109,21 +112,21 @@ for (let i = 0 ; i < choices.length ; i++ ){
             incorrectbox.style.display = 'block'; //正解表示
             resultbox2.textContent = '不正解！';
             description2.textContent = '江戸川区にあります。';
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false1.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
         });
 
     }else{
-        truth.addEventListener('click',() =>{
+        truth.addEventListener('click',() => {
             truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
             correctbox.style.display = 'block'; //正解表示
             resultbox1.textContent = '正解！';
             description1.textContent = `正解は「${choices[i][0]}」です！`;
-            description1.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description1.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             false1.classList.add('notclick');
-            false2.classList.add('notclick');
+            false2.classList.add('notclick'); //他の選択肢のクリック無効化
         });
     
         false1.addEventListener('click',() => {
@@ -131,7 +134,7 @@ for (let i = 0 ; i < choices.length ; i++ ){
             incorrectbox.style.display = 'block'; //正解表示
             resultbox2.textContent = '不正解！';
             description2.textContent = `正解は「${choices[i][0]}」です！`;
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false2.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
@@ -142,7 +145,7 @@ for (let i = 0 ; i < choices.length ; i++ ){
             incorrectbox.style.display = 'block'; //正解表示
             resultbox2.textContent = '不正解！';
             description2.textContent = `正解は「${choices[i][0]}」です！`;
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'});
+            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false1.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
