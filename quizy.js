@@ -37,8 +37,7 @@ function shuffle(arr){
 
 for (let i = 0 ; i < choices.length ; i++ ){
     const shuffleChoices = shuffle([...choices[i]]); //シャッフルした選択肢を要素とする新たな配列
-    let quizySet = '<div class="quizy-container">'
-                    + `<h2 class="question">${i+1}.この地名はなんて読む？</h2>`
+    let quizySet =  `<h2 class="question">${i+1}.この地名はなんて読む？</h2>`
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class="image">`
                     + `<ul class="quizy-selection" id="selection${i+1}">`
                     + '</ul>'
@@ -49,10 +48,9 @@ for (let i = 0 ; i < choices.length ; i++ ){
                     + `<div class="result-box" id="incorrectbox${i+1}">`
                     + `<p class="incorrect-answer" id="result${i+1}-2"></p>`
                     + `<p class="answer-description" id="description${i+1}-2"></p>`
-                    + '</div>'
                     + '</div>';
              
-    document.write(quizySet);
+    document.getElementById('quizy-container').insertAdjacentHTML('beforeend', quizySet);
 
     //ulに子要素であるliを追加して中身をシャッフルした選択肢にする&各選択肢に適切なclassとidをつける
     shuffleChoices.forEach(shuffleChoice => {

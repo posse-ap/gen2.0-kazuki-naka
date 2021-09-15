@@ -41,6 +41,7 @@ body{
     display: inline-block;
     border-bottom: 3px solid #287dff;
 }
+
 .incorrect-answer{
     font-size: 16px;
     line-height: 20px;
