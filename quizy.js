@@ -14,16 +14,16 @@ const choices = [
 ];
 
 const pictures = [
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/34d20397a2a506fe2c1ee636dc011a07.png","高輪"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/512b8146e7661821c45dbb8fefedf731.png","亀戸"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/ad4f8badd896f1a9b527c530ebf8ac7f.png","麹町"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/ee645c9f43be1ab3992d121ee9e780fb.png","御成門"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/6a235aaa10f0bd3ca57871f76907797b.png","等々力"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/0b6789cf496fb75191edf1e3a6e05039.png","石神井"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/23e698eec548ff20a4f7969ca8823c53.png","雑色"],
-    ["https://d1khcm40x1j0f.cloudfront.net/quiz/50a753d151d35f8602d2c3e2790ea6e4.png","御徒町"],
-    ["https://d1khcm40x1j0f.cloudfront.net/words/8cad76c39c43e2b651041c6d812ea26e.png","鹿骨"],
-    ["https://d1khcm40x1j0f.cloudfront.net/words/34508ddb0789ee73471b9f17977e7c9c.png","小榑"],
+    ["img/picture1.png","高輪"],
+    ["img/picture2.png","亀戸"],
+    ["img/picture3.png","麹町"],
+    ["img/picture4.png","御成門"],
+    ["img/picture5.png","等々力"],
+    ["img/picture6.png","石神井"],
+    ["img/picture7.png","雑色"],
+    ["img/picture8.png","御徒町"],
+    ["img/picture9.png","鹿骨"],
+    ["img/picture10.png","小榑"],
 ];
 
 //シャッフル関数
