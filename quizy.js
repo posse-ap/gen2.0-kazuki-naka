@@ -41,14 +41,10 @@ for (let i = 0 ; i < choices.length ; i++ ){
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class="image">`
                     + `<ul class="quizy-selection" id="selection${i+1}">`
                     + '</ul>'
-                    + `<div class="result-box" id="correctbox${i+1}">`
-                    + `<p class="correct-answer" id="result${i+1}-1"></p>`
-                    + `<p class="answer-description" id="description${i+1}-1"></p>`
+                    + `<div class="result-box" id="result-box${i+1}">`
+                    + `<p class="answer" id="result${i+1}"></p>`
+                    + `<p class="answer-description" id="description${i+1}"></p>`
                     + '</div>'
-                    + `<div class="result-box" id="incorrectbox${i+1}">`
-                    + `<p class="incorrect-answer" id="result${i+1}-2"></p>`
-                    + `<p class="answer-description" id="description${i+1}-2"></p>`
-                    + '</div>';
              
     document.getElementById('quizy-container').insertAdjacentHTML('beforeend', quizySet);
 
@@ -71,35 +67,32 @@ for (let i = 0 ; i < choices.length ; i++ ){
         selection.appendChild(li);
     })
 
-
     const truth = document.getElementById(`true${i+1}`);
     const false1 = document.getElementById(`false${i+1}-1`);
     const false2 = document.getElementById(`false${i+1}-2`);
-    const correctbox = document.getElementById(`correctbox${i+1}`); //正解の際に表示されるボックス
-    const incorrectbox = document.getElementById(`incorrectbox${i+1}`); //不正解の際に表示されるボックス
-    const resultbox1 = document.getElementById(`result${i+1}-1`); //「正解!」を表示する部分
-    const resultbox2 = document.getElementById(`result${i+1}-2`); //「不正解！」を表示する部分
-    const description1 = document.getElementById(`description${i+1}-1`); //正解の場合に表示される説明文
-    const description2 = document.getElementById(`description${i+1}-2`); //不正解の場合に表示される説明文
+    const resultbox = document.getElementById(`result-box${i+1}`); //正解の際に表示されるボックス
+    const result = document.getElementById(`result${i+1}`); //「正解!」を表示する部分
+    const description = document.getElementById(`description${i+1}`); //正解の場合に表示される説明文
 
     //鹿骨だけは正解表示が異なるため条件分岐する
     if (i == 8){
         truth.addEventListener('click',() => {
             truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
-            correctbox.style.display = 'block'; //正解表示
-            resultbox1.textContent = '正解！';
-            description1.textContent = '江戸川区にあります。';
-            description1.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '正解！';
+            description.textContent = '江戸川区にあります。';
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             false1.classList.add('notclick');
             false2.classList.add('notclick'); //他の選択肢のクリック無効化
         });
     
         false1.addEventListener('click',() => {
             false1.classList.add('failed'); //背景が赤、文字が白に変化
-            incorrectbox.style.display = 'block'; //正解表示
-            resultbox2.textContent = '不正解！';
-            description2.textContent = '江戸川区にあります。';
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '不正解！';
+            result.classList.add('incorrect-answer'); //不正解の時はアンダーラインが赤になるように上書き
+            description.textContent = '江戸川区にあります。';
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false2.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
@@ -107,10 +100,11 @@ for (let i = 0 ; i < choices.length ; i++ ){
     
         false2.addEventListener('click',() => {
             false2.classList.add('failed'); //背景が赤、文字が白に変化
-            incorrectbox.style.display = 'block'; //正解表示
-            resultbox2.textContent = '不正解！';
-            description2.textContent = '江戸川区にあります。';
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '不正解！';
+            result.classList.add('incorrect-answer'); //不正解の時はアンダーラインが赤になるように上書き
+            description.textContent = '江戸川区にあります。';
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false1.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
@@ -119,20 +113,21 @@ for (let i = 0 ; i < choices.length ; i++ ){
     }else{
         truth.addEventListener('click',() => {
             truth.classList.add('succeed'); //正解の選択肢の背景を青、文字を白にする
-            correctbox.style.display = 'block'; //正解表示
-            resultbox1.textContent = '正解！';
-            description1.textContent = `正解は「${choices[i][0]}」です！`;
-            description1.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '正解！';
+            description.textContent = `正解は「${choices[i][0]}」です！`;
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             false1.classList.add('notclick');
             false2.classList.add('notclick'); //他の選択肢のクリック無効化
         });
     
         false1.addEventListener('click',() => {
             false1.classList.add('failed'); //背景が赤、文字が白に変化
-            incorrectbox.style.display = 'block'; //正解表示
-            resultbox2.textContent = '不正解！';
-            description2.textContent = `正解は「${choices[i][0]}」です！`;
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '不正解！';
+            result.classList.add('incorrect-answer'); //不正解の時はアンダーラインが赤になるように上書き
+            description.textContent = `正解は「${choices[i][0]}」です！`;
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false2.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
@@ -140,10 +135,11 @@ for (let i = 0 ; i < choices.length ; i++ ){
     
         false2.addEventListener('click',() => {
             false2.classList.add('failed'); //背景が赤、文字が白に変化
-            incorrectbox.style.display = 'block'; //正解表示
-            resultbox2.textContent = '不正解！';
-            description2.textContent = `正解は「${choices[i][0]}」です！`;
-            description2.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
+            resultbox.style.display = 'block'; //正解表示
+            result.textContent = '不正解！';
+            result.classList.add('incorrect-answer'); //不正解の時はアンダーラインが赤になるように上書き
+            description.textContent = `正解は「${choices[i][0]}」です！`;
+            description.scrollIntoView({behavior: 'smooth', block: 'center'}); //正解表示がブラウザの真ん中に来るように自動スクロール
             truth.classList.add('succeed'); //正解の選択肢の背景が青、文字が白
             false1.classList.add('notclick'); 
             truth.classList.add('notclick'); //他の選択肢のクリック無効化
