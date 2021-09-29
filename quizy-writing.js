@@ -38,10 +38,10 @@ for(let i = 0; i < choices.length; i++){
     const shuffleChoices = shuffle([...choices[i]]);
     const contents = `<h2>${i + 1}.この地名はなんて読む？</h2>`
                     + `<img src = ${pictures[i][0]} alt = ${pictures[i][1]} class = "image">`
-                    + `<ul id = "selection${i + 1}"></ul>`
-                    + `<div class = "box" id = "answerbox${i + 1}">`
-                    + `<p id = "answer${i + 1}"></p>`
-                    + `<p id = "description${i + 1}"></p>`
+                    + `<ul id="selection${i + 1}"></ul>`
+                    + `<div class="box" id="answerbox${i + 1}">`
+                    + `<p id="answer${i + 1}"></p>`
+                    + `<p id="description${i + 1}" class="description"></p>`
                     + '</div>'
 
     document.getElementById('main').insertAdjacentHTML('beforeend', contents);
@@ -72,65 +72,44 @@ for(let i = 0; i < choices.length; i++){
     const answer = document.getElementById(`answer${i + 1}`);
     const description = document.getElementById(`description${i + 1}`);
 
-    if(i === 8){
-        truth.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            answerbox.style.display = "block";
-            answer.textContent = "正解！";
+    function textContent(){
+        if(i == 8){
             description.textContent = `江戸川区にあります。`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            false1.classList.add('notclick');
-            false2.classList.add('notclick');
-        });
-        false1.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            false1.classList.add('failed');
-            answerbox.style.display = "block";
-            answer.textContent = "不正解！";
-            description.textContent = `江戸川区にあります。`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            truth.classList.add('notclick');
-            false2.classList.add('notclick');
-        });
-        false2.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            false2.classList.add('failed');
-            answerbox.style.display = "block";
-            answer.textContent = "不正解！";
-            description.textContent = `江戸川区にあります。`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            false1.classList.add('notclick');
-            truth.classList.add('notclick');
-        });
-    }else{
-        truth.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            answerbox.style.display = "block";
-            answer.textContent = "正解！";
+        }else{
             description.textContent = `正解は「${choices[i][0]}」です！`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            false1.classList.add('notclick');
-            false2.classList.add('notclick');
-        });
-        false1.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            false1.classList.add('failed');
-            answerbox.style.display = "block";
-            answer.textContent = "不正解！";
-            description.textContent = `正解は「${choices[i][0]}」です！`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            truth.classList.add('notclick');
-            false2.classList.add('notclick');
-        });
-        false2.addEventListener('click', () => {
-            truth.classList.add('succeed');
-            false2.classList.add('failed');
-            answerbox.style.display = "block";
-            answer.textContent = "不正解！";
-            description.textContent = `正解は「${choices[i][0]}」です！`;
-            description.scrollIntoView({behavior: "smooth", block: "center"});
-            false1.classList.add('notclick');
-            truth.classList.add('notclick');
-        });
-    };
+        }
+    }
+
+    truth.addEventListener('click', () => {
+        truth.classList.add('succeed');
+        answerbox.style.display = "block";
+        answer.textContent = "正解！";
+        answer.classList.add('correct-answer');
+        textContent();
+        description.scrollIntoView({behavior: "smooth", block: "center"});
+        false1.classList.add('notclick');
+        false2.classList.add('notclick');
+    });
+    false1.addEventListener('click', () => {
+        truth.classList.add('succeed');
+        false1.classList.add('failed');
+        answerbox.style.display = "block";
+        answer.textContent = "不正解！";
+        answer.classList.add('incorrect-answer');
+        textContent();
+        description.scrollIntoView({behavior: "smooth", block: "center"});
+        truth.classList.add('notclick');
+        false2.classList.add('notclick');
+    });
+    false2.addEventListener('click', () => {
+        truth.classList.add('succeed');
+        false2.classList.add('failed');
+        answerbox.style.display = "block";
+        answer.textContent = "不正解！";
+        answer.classList.add('incorrect-answer');
+        textContent();
+        description.scrollIntoView({behavior: "smooth", block: "center"});
+        false1.classList.add('notclick');
+        truth.classList.add('notclick');
+    });
 }
