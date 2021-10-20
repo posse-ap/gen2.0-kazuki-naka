@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自主制作アプリ</title>
+    <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="image/logo.jpg" alt="POSSE" class="logo">
+        <p class="subtitle">4th week</p>
+        <button id="submit" class="submit">記録・投稿</button>
+    </header>
+    <main>
+        <div class="left-content">
+            <div class="time-display">
+                <div class="learning-time"><p><span class="day">Today</span><br><span class="number">3</span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number">120</span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number">1348</span><br><span class="hour">hour</span></p></div>
+            </div>
+            <div class="graph"></div>
+        </div>
+        <div class="right-content">
+            <div class="learning-content"><p>学習言語</p></div>
+            <div class="learning-content"><p>学習コンテンツ</p></div>
+        </div>
+        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2020年10月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
+    </main>
+    <div id="modal">
+        <div class="modal-content">
+            <div id="back-button" class="back">×</div>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
