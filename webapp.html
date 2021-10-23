@@ -32,8 +32,36 @@
     </main>
     <div id="modal">
         <div class="modal-content">
-            <div id="back-button" class="back">×</div>
-            <button id="modal-submit" class="modal-submit">記録・投稿</button>
+            <div id="modal-content">
+                <button id="modal-submit" class="modal-submit">記録・投稿</button>
+                <div class="">
+                    <div class="learning-date">
+                        <p>学習日</p>
+                        <div id="learning-date"><i id="calender" class="far fa-calendar-alt calender"></i></div>
+                    </div>
+                    <div class="modal-learning-content">
+                        <p>学習コンテンツ(複数選択可)</p>
+                        <div id="content"></div>
+                    </div>
+                    <div class="modal-language">
+                        <p>学習言語</p>
+                        <div id="language"></div>
+                    </div>
+                    <div class="modal-time">
+                        <p>学習時間</p>
+                        <div></div>
+                    </div>
+                    <div class="commentbox">
+                        <p>Twitter用コメント</p>
+                        <div></div>
+                    </div>
+                    <div class="share-button">
+                        <input id="share" type="checkbox"><label for="share">Twitterにシェアする</label>
+                    </div>
+                </div>
+            </div>
+            <div id="back-button" class="back">←</div>
+            <div id="close-button" class="close">×</div>
             <div id="spinner" class="dot-spin"></div>
         </div>
     </div>
