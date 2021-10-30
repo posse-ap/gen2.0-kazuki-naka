@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 </head>
 <body>
     <header>
@@ -22,7 +23,9 @@
                 <div class="learning-time"><p><span class="day">Month</span><br><span class="number">120</span><br><span class="hour">hour</span></p></div>
                 <div class="learning-time"><p><span class="day">Total</span><br><span class="number">1348</span><br><span class="hour">hour</span></p></div>
             </div>
-            <div class="graph"></div>
+            <div class="graph">
+                <canvas id="myBarChart"></canvas>
+            </div>
         </div>
         <div class="right-content">
             <div class="learning-content"><p>学習言語</p></div>
@@ -32,37 +35,48 @@
     </main>
     <div id="modal">
         <div class="modal-content">
-            <div id="modal-content">
-                <button id="modal-submit" class="modal-submit">記録・投稿</button>
-                <div class="">
-                    <div class="learning-date">
-                        <p>学習日</p>
-                        <div id="learning-date"><i id="calender" class="far fa-calendar-alt calender"></i></div>
-                    </div>
-                    <div class="modal-learning-content">
-                        <p>学習コンテンツ(複数選択可)</p>
-                        <div id="content"></div>
-                    </div>
-                    <div class="modal-language">
-                        <p>学習言語</p>
-                        <div id="language"></div>
-                    </div>
-                    <div class="modal-time">
-                        <p>学習時間</p>
-                        <div></div>
-                    </div>
-                    <div class="commentbox">
-                        <p>Twitter用コメント</p>
-                        <div></div>
-                    </div>
-                    <div class="share-button">
-                        <input id="share" type="checkbox"><label for="share">Twitterにシェアする</label>
-                    </div>
+            <div id="modal-content" class="contents">
+                <div class="learning-date">
+                    <p>学習日</p>
+                    <div id="learning-date"><i id="calender-icon" class="far fa-calendar-alt calender"></i></div>
+                </div>
+                <div class="modal-learning-content">
+                    <p>学習コンテンツ(複数選択可)</p>
+                    <div id="content"></div>
+                </div>
+                <div class="modal-language">
+                    <p>学習言語</p>
+                    <div id="language"></div>
+                </div>
+                <div class="modal-time">
+                    <p>学習時間</p>
+                    <div></div>
+                </div>
+                <div class="commentbox">
+                    <p>Twitter用コメント</p>
+                    <div></div>
+                </div>
+                <div class="share-button">
+                    <input id="share" type="checkbox"><label for="share">Twitterにシェアする</label>
                 </div>
             </div>
+            <button id="modal-submit" class="button">記録・投稿</button>
             <div id="back-button" class="back">←</div>
             <div id="close-button" class="close">×</div>
             <div id="spinner" class="dot-spin"></div>
+            <div id="calender-wrapper" class="wrapper">
+                <!-- xxxx年xx月を表示 -->
+                <h1 id="header"></h1>
+                <!-- ボタンクリックで月移動 -->
+                <div id="next-prev-button">
+                    <button id="prev" onclick="prev()">‹</button>
+                    <button id="next" onclick="next()">›</button>
+                </div>
+            
+                <!-- カレンダー -->
+                <div id="calendar"></div>
+                <button id="decision" class="button">決定</button>
+            </div>
         </div>
     </div>
     <script src="index.js"></script>

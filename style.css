@@ -172,8 +172,17 @@ main{
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  display: flex;
-  flex-flow: column wrap;
+}
+
+/* 折り返し分からないから聞く */
+.contents{
+  display: grid;
+  grid-template-rows: 50% 50%;
+  grid-template-columns: auto auto auto auto;
+}
+
+.contents>div{
+  height: auto;
 }
 
 .close{
@@ -190,7 +199,7 @@ main{
   cursor: pointer;
 }
 
-.modal-submit{
+.button{
   background: linear-gradient(to right, #0F71BC, #3BCFFF);
   color: white;
   height: 56px;
@@ -401,4 +410,64 @@ main{
   text-align: center;
   cursor: pointer;
   display: none;
+}
+
+.wrapper{
+  max-width: 600px;
+  margin: 0 auto;
+  color: #666;
+  display: none;
+}
+#header {
+  font-size: 24px;
+  width: 100%;
+  margin: 1rem 0 0;
+  display: block;
+  position: relative;
+  left: 50%;
+  transform: translate(-50%,0);
+}
+
+/*カレンダー*/
+#calendar {
+  text-align: center;
+  width: 100%;
+}
+table {
+  width: 100%;
+}
+th {
+  color: #AFC8DB;
+}
+th, td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+/*前後月の日付*/
+td.disabled {
+  color: #ccc;
+}
+/*本日*/
+td.today {
+  background-color: #0F71BC;
+  color: #fff;
+  border-radius: 50%;
+}
+/*ボタン*/
+#next-prev-button {
+  position: relative;
+}
+#next-prev-button button{
+  cursor: pointer;
+  color: #0F71BC;
+  font-size: 1.5rem;
+  padding: 0.5rem 2rem;
+  margin: 1rem 0;
+}
+#prev {
+  float: left;
+}
+#next {
+  float: right;
 }
