@@ -63,44 +63,113 @@ for(let j = 0;j < languages.length;j++){
   language.appendChild(div);
 }
 
-// グラフの表示
+// 棒グラフの表示
 let ctx = document.getElementById("myBarChart");
 let myBarChart = new Chart(ctx, {
   type: 'bar',
   data: {
    //凡例のラベル
-    labels: ['1', '2', '3', '4', '5','6','7','8','9','10','11', '12', '13', '14', '15','16','17','18','19','20','21', '22', '23', '24', '25','26','27','28','29','30'],
+    labels: [,'2', ,'4', ,'6', ,'8', ,'10', , '12', , '14', ,'16', ,'18', ,'20', , '22', , '24', ,'26', ,'28', ,'30'],
     datasets: [
       {
         label: '学習時間', //データ項目のラベル
         data: [3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1], //グラフのデータ
         backgroundColor: "rgb(15,114,188)"
-       }//,{
-      //   label: 'PV数', //データ項目のラベル
-      //   data: [190,230,380,320,480], //グラフのデータ
-      //   backgroundColor: "rgba(80,126,164,0.5)"
-      // },{
-      //   label: 'セッション数', //データ項目のラベル
-      //   data: [160,180,220,190,300], //グラフのデータ
-      //   backgroundColor: "rgba(230,180,34,0.5)"
-      // }
+       }
     ]
   },
   options: {
-    // title: {
-    //   display: true,
-    //   //グラフタイトル
-    //   text: 'Aサイト分析'
-    // },
     scales: {
+      xAxes: [{
+        display: true,
+        stacked: false,
+        gridLines: {
+          display: false
+        }
+      }],
       yAxes: [{
         ticks: {
           suggestedMax: 8, //最大値
           suggestedMin: 0, //最小値
           stepSize: 2, //縦ラベルの数値単位
-          }
+        },
+        gridLines: {
+          drawBorder: false
+        }
       }]
     },
+  }
+});
+
+//円グラフの表示
+var chart1 = document.getElementById("myDoughnutChart1");
+var myDoughnutChart1= new Chart(chart1, {
+  type: 'doughnut',
+  data: {
+    datasets: [{
+        backgroundColor: [
+            "#0042E5",
+            "#0070B9",
+            "#00BDDB",
+            "#08CDFA",
+            "#B29DEF",
+            "#6C43E5",
+            "#4609E8",
+            "#2D00BA"
+        ],
+        data: [5.9, 11.8, 23.5, 14.7,8.8,29.4,5.9,0] //グラフのデータ
+    }],
+    labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
+  },
+  options: {
+    cutoutPercentage: 45,
+    maintainAspectRatio: false,
+    legend:{
+      position: "bottom"
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem, data) {
+          return data.labels[tooltipItem.index]
+            + ": "
+            + data.datasets[0].data[tooltipItem.index]
+            + " %"; //ここで単位を付けます
+        }
+      }
+    }
+  }
+});
+
+var chart2 = document.getElementById("myDoughnutChart2");
+var myDoughnutChart2= new Chart(chart2, {
+  type: 'doughnut',
+  data: {
+    datasets: [{
+        backgroundColor: [
+            "#0042E5",
+            "#0070B9",
+            "#00BDDB"
+        ],
+        data: [94.1,0,5.9] //グラフのデータ
+    }],
+    labels: ["ドットインストール","N予備校","POSSE課題"]
+  },
+  options: {
+    cutoutPercentage: 45,
+    maintainAspectRatio: false,
+    legend:{
+      position: "bottom"
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem, data) {
+          return data.labels[tooltipItem.index]
+            + ": "
+            + data.datasets[0].data[tooltipItem.index]
+            + " %"; //ここで単位を付けます
+        }
+      }
+    }
   }
 });
 
