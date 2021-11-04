@@ -7,11 +7,13 @@ const spinner = document.getElementById('spinner');
 const closeButton = document.getElementById('close-button');
 const backButton = document.getElementById('back-button');
 const calender = document.getElementById('calender-wrapper');
-const decision = document.getElementById('desicion');
+const decision = document.getElementById('decision');
+decision.style.display = 'none';
 
 //トップページの記録・投稿ボタンを押したときの処理
 document.getElementById('top-submit').addEventListener('click', () => {
   modalContent.style.display = 'block';
+  modalSubmit.style.display = 'block';
   modal.style.display = 'block';
 })
 
@@ -19,12 +21,23 @@ document.getElementById('top-submit').addEventListener('click', () => {
 closeButton.addEventListener('click', () => {
   modal.style.display = 'none';
   spinner.style.display = 'none';
+  document.getElementById('check-mark').style.display = 'none';
 })
 
-//モーダルページの記録・投稿ボタンを押したらローディング画面表示
+//モーダルページの記録・投稿ボタンを押したらローディング画面表示&Twitter遷移
+let $url = 'https://twitter.com/intent/tweet?';
+modalSubmit.setAttribute('href', $url);
+let shareButton = document.getElementById('share');
 modalSubmit.addEventListener('click', () => {
   modalContent.style.display = 'none';
   spinner.style.display = 'block';
+  setTimeout(getFinished, 3000);
+  modalSubmit.style.display = 'none';
+  if(shareButton.checked === true){
+    $url += `text=${document.getElementById('twitter-comment').value}`;
+    console.log($url);
+    window.open($url, '_blank');
+  }
 })
 
 //カレンダーアイコンを押したらカレンダー表示
@@ -34,6 +47,7 @@ document.getElementById('calender-icon').addEventListener('click', () => {
   closeButton.style.display = 'none';
   backButton.style.display = 'block';
   calender.style.display = 'block';
+  decision.style.display = 'block';
 })
 
 backButton.addEventListener('click', () => {
@@ -41,27 +55,19 @@ backButton.addEventListener('click', () => {
   modalContent.style.display = 'block';
   backButton.style.display = 'none';
   closeButton.style.display = 'block';
+  calender.style.display = 'none';
+  decision.style.display = 'none';
 })
 
 //決定ボタンを押した後の実装
-
-const contents = ["N予備校","ドットインストール","POSSE課題"];
-const content = document.getElementById('content');
-for(let i = 0;i < contents.length;i++){
-  const div = document.createElement('div');
-  div.classList.add('content');
-  div.textContent = contents[i];
-  content.appendChild(div);
-}
-
-const languages = ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"];
-const language = document.getElementById('language');
-for(let j = 0;j < languages.length;j++){
-  const div = document.createElement('div');
-  div.classList.add('content');
-  div.textContent = languages[j];
-  language.appendChild(div);
-}
+decision.addEventListener('click', () => {
+  decision.style.display = 'none';
+  calender.style.display = 'none';
+  backButton.style.display = 'none';
+  modalSubmit.style.display = 'block';
+  modalContent.style.display = 'block';
+  closeButton.style.display = 'block';
+})
 
 // 棒グラフの表示
 let ctx = document.getElementById("myBarChart");
@@ -76,7 +82,7 @@ let myBarChart = new Chart(ctx, {
         data: [3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1], //グラフのデータ
         backgroundColor: "rgb(15,114,188)"
        }
-    ]
+    ],
   },
   options: {
     scales: {
@@ -92,18 +98,54 @@ let myBarChart = new Chart(ctx, {
           suggestedMax: 8, //最大値
           suggestedMin: 0, //最小値
           stepSize: 2, //縦ラベルの数値単位
+          callback: function(tick){
+            return tick.toString() + 'h';
+          }
         },
         gridLines: {
-          drawBorder: false
+          display: false
         }
-      }]
+      }],
     },
   }
 });
 
 //円グラフの表示
-var chart1 = document.getElementById("myDoughnutChart1");
-var myDoughnutChart1= new Chart(chart1, {
+let dataLabelPlugin = {
+  afterDatasetsDraw: function (chart, easing) {
+    // To only draw at the end of animation, check for easing === 1
+    var ctx = chart.ctx;
+
+    chart.data.datasets.forEach(function (dataset, i) {
+        var meta = chart.getDatasetMeta(i);
+        if (!meta.hidden) {
+            meta.data.forEach(function (element, index) {
+                // Draw the text in black, with the specified font
+                ctx.fillStyle = 'rgb(0, 0, 0)';
+
+                let fontSize = 12;
+                let fontStyle = 'normal';
+                let fontFamily = 'Helvetica Neue';
+                ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+                // Just naively convert to string for now
+                var dataString = dataset.data[index].toString() + "%";
+
+                // Make sure alignment settings are correct
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = 'white';
+
+                var padding = 5;
+                var position = element.tooltipPosition();
+                ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+            });
+        }
+    });
+}
+}
+let chart1 = document.getElementById("myDoughnutChart1");
+let myDoughnutChart1= new Chart(chart1, {
   type: 'doughnut',
   data: {
     datasets: [{
@@ -121,6 +163,7 @@ var myDoughnutChart1= new Chart(chart1, {
     }],
     labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
   },
+  plugins: [dataLabelPlugin],
   options: {
     cutoutPercentage: 45,
     maintainAspectRatio: false,
@@ -133,15 +176,15 @@ var myDoughnutChart1= new Chart(chart1, {
           return data.labels[tooltipItem.index]
             + ": "
             + data.datasets[0].data[tooltipItem.index]
-            + " %"; //ここで単位を付けます
+            + " %"; 
         }
       }
     }
   }
 });
 
-var chart2 = document.getElementById("myDoughnutChart2");
-var myDoughnutChart2= new Chart(chart2, {
+let chart2 = document.getElementById("myDoughnutChart2");
+let myDoughnutChart2= new Chart(chart2, {
   type: 'doughnut',
   data: {
     datasets: [{
@@ -154,6 +197,7 @@ var myDoughnutChart2= new Chart(chart2, {
     }],
     labels: ["ドットインストール","N予備校","POSSE課題"]
   },
+  plugins: [dataLabelPlugin],
   options: {
     cutoutPercentage: 45,
     maintainAspectRatio: false,
@@ -166,7 +210,7 @@ var myDoughnutChart2= new Chart(chart2, {
           return data.labels[tooltipItem.index]
             + ": "
             + data.datasets[0].data[tooltipItem.index]
-            + " %"; //ここで単位を付けます
+            + " %"; 
         }
       }
     }
@@ -238,9 +282,9 @@ function createProcess(year, month) {
                 if(year == today.getFullYear()
                   && month == (today.getMonth())
                   && count == today.getDate()){
-                    calendar += "<td class='today'>" + count + "</td>";
+                    calendar += `<td aria-selected="true" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
                 } else {
-                    calendar += "<td>" + count + "</td>";
+                    calendar += `<td aria-selected="false" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
                 }
             }
         }
@@ -248,3 +292,20 @@ function createProcess(year, month) {
     }
     return calendar;
 }
+
+//3秒ほど経過したら記録完了を表示
+function getFinished(){
+  document.getElementById('check-mark').style.display = 'block';
+  spinner.style.display = 'none';
+}
+
+// const calenderInput = document.getElementById('calender-input');
+// const td = document.querySelectorAll('td');
+// function setDate(year,month,count){
+//   calenderInput.value = `${year}年${month}月${count}日`;
+//   console.log(td[count-1].textContent);
+//   td.forEach(cell => {
+//     cell.setAttribute('aria-selected',false);
+//   })
+//   td[count-1].setAttribute('aria-selected',true);
+// }
