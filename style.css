@@ -59,6 +59,7 @@ main{
 }
 
 .time-display{
+  width: 100%;
   display: flex;
   gap: 20px;
 }
@@ -162,6 +163,10 @@ main{
   display: none;
 }
 
+.content-of-content{
+  display: inline-block;
+}
+
 .modal-content{
   background: #ffffff;
   height: 600px;
@@ -174,17 +179,24 @@ main{
   transform: translate(-50%,-50%);
 }
 
-/* 折り返し分からないから聞く */
-/* .contents{
-  height: 80%;
+.contents{
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
 }
 
-.contents>div{
-  height: auto;
-} */
+.modal-leftcontent{
+  margin-right: 0;
+  height:100%;
+  width: 40%;
+}
+
+.modal-rightcontent{
+  margin-right: 0;
+  height: 100%;
+  width: 40%;
+}
 
 .close{
   background: #F5F5F8;
@@ -292,8 +304,8 @@ main{
 }
 
 .learning-date{
-  width: 40%;
-  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
 }
 
 .learning-date div{
@@ -314,8 +326,8 @@ main{
 }
 
 .modal-learning-content{
-  width: 40%;
-  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
 }
 
 #content{
@@ -382,8 +394,8 @@ main{
 }
 
 .modal-language{
-  width: 40%;
-  box-sizing: border-box;
+  margin: 0;
+  width: 100%;
 }
 
 #language{
@@ -394,8 +406,7 @@ main{
 }
 
 .modal-time{
-  width: 40%;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .modal-time > div{
@@ -407,8 +418,7 @@ main{
 }
 
 .commentbox{
-  width: 40%;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .commentbox div{
@@ -420,8 +430,7 @@ main{
 }
 
 .share-button{
-  width: 40%;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 /* 元々のチェックボックス（非表示） */

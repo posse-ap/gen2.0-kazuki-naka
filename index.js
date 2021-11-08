@@ -35,7 +35,6 @@ modalSubmit.addEventListener('click', () => {
   modalSubmit.style.display = 'none';
   if(shareButton.checked === true){
     $url += `text=${document.getElementById('twitter-comment').value}`;
-    console.log($url);
     window.open($url, '_blank');
   }
 })
@@ -298,14 +297,3 @@ function getFinished(){
   document.getElementById('check-mark').style.display = 'block';
   spinner.style.display = 'none';
 }
-
-// const calenderInput = document.getElementById('calender-input');
-// const td = document.querySelectorAll('td');
-// function setDate(year,month,count){
-//   calenderInput.value = `${year}年${month}月${count}日`;
-//   console.log(td[count-1].textContent);
-//   td.forEach(cell => {
-//     cell.setAttribute('aria-selected',false);
-//   })
-//   td[count-1].setAttribute('aria-selected',true);
-// }
