@@ -2,17 +2,18 @@
 
 const modal = document.getElementById('modal');
 const modalSubmit = document.getElementById('modal-submit');
-const modalContent = document.getElementById('modal-content');
+const allModalContent = document.getElementById('all-modal-content');
 const spinner = document.getElementById('spinner');
 const closeButton = document.getElementById('close-button');
 const backButton = document.getElementById('back-button');
 const calender = document.getElementById('calender-wrapper');
+const chosenCalender = document.getElementById('calender-input');
 const decision = document.getElementById('decision');
 decision.style.display = 'none';
 
 //トップページの記録・投稿ボタンを押したときの処理
 document.getElementById('top-submit').addEventListener('click', () => {
-  modalContent.style.display = 'block';
+  allModalContent.style.display = 'flex';
   modalSubmit.style.display = 'block';
   modal.style.display = 'block';
 })
@@ -29,7 +30,7 @@ let $url = 'https://twitter.com/intent/tweet?';
 modalSubmit.setAttribute('href', $url);
 let shareButton = document.getElementById('share');
 modalSubmit.addEventListener('click', () => {
-  modalContent.style.display = 'none';
+  allModalContent.style.display = 'none';
   spinner.style.display = 'block';
   setTimeout(getFinished, 3000);
   modalSubmit.style.display = 'none';
@@ -42,7 +43,7 @@ modalSubmit.addEventListener('click', () => {
 //カレンダーアイコンを押したらカレンダー表示
 document.getElementById('calender-icon').addEventListener('click', () => {
   modalSubmit.style.display = 'none';
-  modalContent.style.display = 'none';
+  allModalContent.style.display = 'none';
   closeButton.style.display = 'none';
   backButton.style.display = 'block';
   calender.style.display = 'block';
@@ -51,7 +52,7 @@ document.getElementById('calender-icon').addEventListener('click', () => {
 
 backButton.addEventListener('click', () => {
   modalSubmit.style.display = 'block';
-  modalContent.style.display = 'block';
+  allModalContent.style.display = 'flex';
   backButton.style.display = 'none';
   closeButton.style.display = 'block';
   calender.style.display = 'none';
@@ -64,8 +65,9 @@ decision.addEventListener('click', () => {
   calender.style.display = 'none';
   backButton.style.display = 'none';
   modalSubmit.style.display = 'block';
-  modalContent.style.display = 'block';
+  allModalContent.style.display = 'flex';
   closeButton.style.display = 'block';
+  chosenCalender.style.display = 'block';
 })
 
 // 棒グラフの表示
@@ -79,7 +81,7 @@ let myBarChart = new Chart(ctx, {
       {
         label: '学習時間', //データ項目のラベル
         data: [3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1], //グラフのデータ
-        backgroundColor: "rgb(15,114,188)"
+        backgroundColor: 'rgb(15,114,188)',
        }
     ],
   },
@@ -167,7 +169,8 @@ let myDoughnutChart1= new Chart(chart1, {
     cutoutPercentage: 45,
     maintainAspectRatio: false,
     legend:{
-      position: "bottom"
+      position: "bottom",
+      display: false,
     },
     tooltips: {
       callbacks: {
@@ -178,7 +181,7 @@ let myDoughnutChart1= new Chart(chart1, {
             + " %"; 
         }
       }
-    }
+    },
   }
 });
 
@@ -201,7 +204,8 @@ let myDoughnutChart2= new Chart(chart2, {
     cutoutPercentage: 45,
     maintainAspectRatio: false,
     legend:{
-      position: "bottom"
+      position: "bottom",
+      display: false,
     },
     tooltips: {
       callbacks: {
@@ -296,4 +300,8 @@ function createProcess(year, month) {
 function getFinished(){
   document.getElementById('check-mark').style.display = 'block';
   spinner.style.display = 'none';
+}
+
+function setDate(year,month,count){
+  chosenCalender.innerHTML = `${year}年${month}月${count}日`;
 }
