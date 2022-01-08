@@ -1,7 +1,7 @@
 <?php
-echo phpinfo();
+// echo phpinfo();
 
-$dsn = 'mysql:host=mysql;dbname=quizy;charset=utf8mb4';
+$dsn = 'mysql:host=mysql;dbname=quizy;charset=utf8';
 $user = 'kazuki';
 $password = 'pass';
 
@@ -10,7 +10,7 @@ try{
 
     print('接続に成功しました。<br>');
 
-    $dbh->query('SET NAMES sjis');
+    $dbh->query('SET NAMES cp932');
 
     $sql = 'select * from big_questions';
     foreach ($dbh->query($sql) as $row) {

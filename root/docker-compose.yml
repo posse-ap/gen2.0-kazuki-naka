@@ -8,9 +8,11 @@ services:
       - MYSQL_USER=kazuki
       - MYSQL_PASSWORD=pass
       - MYSQL_ROOT_PASSWORD=pass
-
+    ports:
+      - "3306:3306"
     volumes:
       - ./initdb.d:/docker-entrypoint-initdb.d
+      - ./initdb.d/my.conf:/etc/mysql/conf.d/my.conf
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
@@ -18,17 +20,17 @@ services:
     depends_on: ["mysql"]
 
   php:
-    image: php:7.4-fpm
     volumes:
       - ./nginx/html:/usr/share/nginx/html
       - ./php/php.ini:/usr/local/etc/php/php.ini
     depends_on: ["mysql"]
+    build: ./php
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx/html:/usr/share/nginx/html
+      - .:/var/www/html
     restart: always
     ports: ["8080:80"]
     depends_on: ["php"]
