@@ -9,17 +9,27 @@ try{
 
     $dbh->query('SET NAMES utf8');
 
-    $id = filter_input(INPUT_GET,'id');
-    $stmt = $dbh -> query("SELECT * FROM big_questions WHERE id = '".$id."'");
-
-    $area = $stmt -> fetchAll();
-    print_r($area) . PHP_EOL;
 }catch (PDOException $e){
     print('Error:'.$e->getMessage());
     die();
 }
 
-$dbh = null;
+$stmt = $dbh->prepare('SELECT * FROM big_questions WHERE id=:id');
+$stmt->bindParam(':id',$_GET['id']);
+$stmt->execute();
+$big_questions = $stmt->fetchAll();
+// print_r($big_questions) . PHP_EOL;
+
+
+$stmt = $dbh->query('SELECT * FROM questions');
+$stmt->execute();
+$questions = $stmt->fetchAll();
+
+// print_r($questions) . PHP_EOL;
+
+$stmt = $dbh->query('SELECT * FROM choices');
+$choices = $stmt->fetchAll();
+// print_r($choices) . PHP_EOL;
 
 ?>
 
@@ -29,13 +39,15 @@ $dbh = null;
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガチで東京の人しか解けない！＃東京の難読地名クイズ</title>
+    <title>ガチで<?=$big_questions[0]['name']?>の人しか解けない！＃<?=$big_questions[0]['name']?></title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
     <link rel="stylesheet" href="quizy.css">
 </head>
 <body>
     <div class="quizy-container" id="quizy-container">
-        <h1>ガチで東京の人しか解けない！ #東京の難読地名クイズ</h1>
+        <h1>ガチで<?=$big_questions[0]['name']?>の人しか解けない！ #<?=$big_questions[0]['name']?>の難読地名クイズ</h1>
+        <h2><?=$questions['question_id']?>.この地名は何て読む？</h2>
+        <img src="./image/<?= $questions['image']?>" alt="">
     </div>
     <script src="quizy.js"></script>
 </body>

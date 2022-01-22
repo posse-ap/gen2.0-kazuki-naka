@@ -8,8 +8,8 @@ CREATE TABLE big_questions
   name     VARCHAR(40)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO big_questions (id, name) VALUES (1, "東京の難読地名クイズ");
-INSERT INTO big_questions (id, name) VALUES (2, "広島の難読地名クイズ");
+INSERT INTO big_questions (id, name) VALUES (1, "東京");
+INSERT INTO big_questions (id, name) VALUES (2, "広島");
 
 CREATE TABLE questions
 (
