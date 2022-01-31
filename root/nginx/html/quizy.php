@@ -25,8 +25,6 @@ $stmt = $dbh->query('SELECT * FROM questions');
 $stmt->execute();
 $questions = $stmt->fetchAll();
 
-// print_r($questions) . PHP_EOL;
-
 $stmt = $dbh->query('SELECT * FROM choices');
 $choices = $stmt->fetchAll();
 // print_r($choices) . PHP_EOL;
@@ -41,13 +39,13 @@ $choices = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ガチで<?=$big_questions[0]['name']?>の人しか解けない！＃<?=$big_questions[0]['name']?></title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
-    <link rel="stylesheet" href="quizy.css">
+    <link rel="stylesheet" href="../quizy.css">
 </head>
 <body>
     <div class="quizy-container" id="quizy-container">
-        <h1>ガチで<?=$big_questions[0]['name']?>の人しか解けない！ #<?=$big_questions[0]['name']?>の難読地名クイズ</h1>
-        <h2><?=$questions['question_id']?>.この地名は何て読む？</h2>
-        <img src="./image/<?= $questions['image']?>" alt="">
+        <h1>ガチで<?=$big_questions[0]['name'];?>の人しか解けない！ #<?=$big_questions[0]['name'];?>の難読地名クイズ</h1>    
+        <h2><?=$questions[0]['big_question_id'];?>.この地名は何て読む？</h2>
+        <img src="./image/<?= $questions[0]['image'];?>" alt="難読地名">
     </div>
     <script src="quizy.js"></script>
 </body>
