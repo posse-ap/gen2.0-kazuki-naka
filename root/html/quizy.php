@@ -34,8 +34,6 @@ if($id == 1){
     $choices = $stmt->fetchAll();
 }
 
-$choice_array = [];
-
 ?>
 
 <!DOCTYPE html>
@@ -51,13 +49,16 @@ $choice_array = [];
 <body>
     <div class="quizy-container" id="quizy-container">
         <h1>ガチで<?=$big_questions[0]['name'];?>の人しか解けない！ #<?=$big_questions[0]['name'];?>の難読地名クイズ</h1>
-        <?php for($i = 0;$i < count($questions);$i++){?>
+        <?php for($i = 0;$i < count($questions);$i++){ $choice_array = [];?>
             <h2 class="question"><?=$i + 1?>.この地名は何て読む？</h2>
             <img src="./image/<?= $questions[$i]['image'];?>" alt="難読地名" class="image">
             <ul class="quizy-selection">
-                <?php for($j = $i*3;$j < $i*3 + 3;$j++){?>
-                <li class="choice"><?= $choices[$j]['name'];?></li>
-                <?php };?>
+                <?php for($j = $i*3;$j < $i*3 + 3;$j++){
+                    array_push($choice_array,$choices[$j]);
+                };shuffle($choice_array)?>
+                <?php foreach($choice_array as $choice):?>
+                <li class="choice"><?= $choice['name'];?></li>
+                <?php endforeach;?>
             </ul>
         <?php };?>
     </div>
