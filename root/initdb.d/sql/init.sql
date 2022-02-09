@@ -34,7 +34,7 @@ INSERT INTO choices (question_id,name,valid) VALUES (1,'たかなわ',1);
 INSERT INTO choices (question_id,name,valid) VALUES (1,'たかわ',0);
 INSERT INTO choices (question_id,name,valid) VALUES (1,'こうわ',0);
 INSERT INTO choices (question_id,name,valid) VALUES (2,'かめと',0);
-INSERT INTO choices (question_id,name,valid) VALUES (2,'かめど',1);
+INSERT INTO choices (question_id,name,valid) VALUES (2,'かめど',0);
 INSERT INTO choices (question_id,name,valid) VALUES (2,'かめいど',1);
 INSERT INTO choices (question_id,name,valid) VALUES (3,'むこうひら',0);
 INSERT INTO choices (question_id,name,valid) VALUES (3,'むきひら',0);

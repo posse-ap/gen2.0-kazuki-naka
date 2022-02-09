@@ -14,21 +14,27 @@ try{
     die();
 }
 
+//東京か広島か
 $stmt = $dbh->prepare('SELECT * FROM big_questions WHERE id=:id');
-$stmt->bindParam(':id',$_GET['id']);
+$id = $_GET['id'];
+$stmt->bindParam(':id',$id);
 $stmt->execute();
 $big_questions = $stmt->fetchAll();
-// print_r($big_questions) . PHP_EOL;
 
+//東京だったら高輪と亀戸、広島だったら向洋を取得
+if($id == 1){
+    $stmt = $dbh->query('SELECT * FROM questions WHERE big_question_id = 1');
+    $questions = $stmt->fetchAll();
+    $stmt = $dbh->query('SELECT * FROM choices WHERE question_id = 1 OR question_id = 2');
+    $choices = $stmt->fetchAll();
+}else{
+    $stmt = $dbh->query('SELECT * FROM questions WHERE big_question_id = 2');
+    $questions = $stmt->fetchAll();
+    $stmt = $dbh->query('SELECT * FROM choices WHERE question_id = 3');
+    $choices = $stmt->fetchAll();
+}
 
-$stmt = $dbh->query('SELECT * FROM questions');
-$stmt->execute();
-$questions = $stmt->fetchAll();
-print_r($questions[1]['image']);
-
-$stmt = $dbh->query('SELECT * FROM choices');
-$choices = $stmt->fetchAll();
-// print_r($choices) . PHP_EOL;
+$choice_array = [];
 
 ?>
 
@@ -44,10 +50,17 @@ $choices = $stmt->fetchAll();
 </head>
 <body>
     <div class="quizy-container" id="quizy-container">
-        <h1>ガチで<?=$big_questions[0]['name'];?>の人しか解けない！ #<?=$big_questions[0]['name'];?>の難読地名クイズ</h1>    
-        <h2><?=$questions[0]['big_question_id'];?>.この地名は何て読む？</h2>
-        <img src="./image/takanawa.png" alt="難読地名">
+        <h1>ガチで<?=$big_questions[0]['name'];?>の人しか解けない！ #<?=$big_questions[0]['name'];?>の難読地名クイズ</h1>
+        <?php for($i = 0;$i < count($questions);$i++){?>
+            <h2 class="question"><?=$i + 1?>.この地名は何て読む？</h2>
+            <img src="./image/<?= $questions[$i]['image'];?>" alt="難読地名" class="image">
+            <ul class="quizy-selection">
+                <?php for($j = $i*3;$j < $i*3 + 3;$j++){?>
+                <li class="choice"><?= $choices[$j]['name'];?></li>
+                <?php };?>
+            </ul>
+        <?php };?>
     </div>
-    <script src="quizy.js"></script>
+    <!-- <script src="quizy.js"></script> -->
 </body>
 </html>
