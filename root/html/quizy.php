@@ -53,15 +53,23 @@ if($id == 1){
             <h2 class="question"><?=$i + 1?>.この地名は何て読む？</h2>
             <img src="./image/<?= $questions[$i]['image'];?>" alt="難読地名" class="image">
             <ul class="quizy-selection">
-                <?php for($j = $i*3;$j < $i*3 + 3;$j++){
-                    array_push($choice_array,$choices[$j]);
-                };shuffle($choice_array)?>
+                <?php for($j = $i*3;$j < $i*3 + 3;$j++){?>
+                <?php array_push($choice_array,$choices[$j]);?>
+                <?php };shuffle($choice_array);$k = 1;?>
                 <?php foreach($choice_array as $choice):?>
-                <li class="choice"><?= $choice['name'];?></li>
+                <?php if($choice['valid'] == 1):?>
+                    <li class="choice" id="<?= "true{$i}";?>"><?= $choice['name'];?></li>
+                <?php else:?>
+                    <li class="choice" id="<?= "false{$i}-{$k}";$k++;?>"><?= $choice['name'];?></li>
+                <?php endif;?>
                 <?php endforeach;?>
             </ul>
+            <div class="result-box" id="<?="result-box{$i}";?>">
+                <p class="answer" id="<?= "result{$i}";?>"></p>
+                <p class="answer-description" id="<?="description{$i}";?>"></p>
+            </div>
         <?php };?>
     </div>
-    <!-- <script src="quizy.js"></script> -->
+    <script src="./quizy.js"></script>
 </body>
 </html>
