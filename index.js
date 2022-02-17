@@ -169,8 +169,7 @@ let myDoughnutChart1= new Chart(chart1, {
     cutoutPercentage: 45,
     maintainAspectRatio: false,
     legend:{
-      position: "bottom",
-      display: false,
+      position: "bottom"
     },
     tooltips: {
       callbacks: {
@@ -205,7 +204,6 @@ let myDoughnutChart2= new Chart(chart2, {
     maintainAspectRatio: false,
     legend:{
       position: "bottom",
-      display: false,
     },
     tooltips: {
       callbacks: {
