@@ -301,5 +301,5 @@ function getFinished(){
 }
 
 function setDate(year,month,count){
-  chosenCalender.innerHTML = `${year}年${month}月${count}日`;
+  chosenCalender.value = `${year}年${month}月${count}日`;
 }
