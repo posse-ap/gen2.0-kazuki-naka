@@ -4,7 +4,7 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      - MYSQL_DATABASE=quizy
+      - MYSQL_DATABASE=webapp
       - MYSQL_USER=kazuki
       - MYSQL_PASSWORD=pass
       - MYSQL_ROOT_PASSWORD=pass
