@@ -14,13 +14,13 @@ require('./dbconnect.php');
     <title>自主制作アプリ</title>
     <link rel="stylesheet" href="https://unpkg.com/ress/dist/ress.min.css">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./responsive.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 </head>
 <body>
     <header>
-        <img src="image/logo.jpg" alt="POSSE" class="logo">
+        <img src="./image/logo.jpg" alt="POSSE" class="logo">
         <p class="subtitle">4th week</p>
         <button id="top-submit" class="top-submit">記録・投稿</button>
     </header>
@@ -45,7 +45,7 @@ require('./dbconnect.php');
                 <canvas id="myDoughnutChart2"></canvas>
             </div>
         </div>
-        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2020年10月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
+        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年3月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
     </main>
     <div id="modal">
         <div class="modal-content">
@@ -110,6 +110,6 @@ require('./dbconnect.php');
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
 </body>
 </html>

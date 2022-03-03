@@ -6,8 +6,8 @@ services:
     environment:
       - MYSQL_DATABASE=webapp
       - MYSQL_USER=kazuki
-      - MYSQL_PASSWORD=pass
-      - MYSQL_ROOT_PASSWORD=pass
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_PASSWORD=password
     ports:
       - "3306:3306"
     volumes:

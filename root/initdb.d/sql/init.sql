@@ -2,7 +2,10 @@ DROP SCHEMA IF EXISTS webapp;
 CREATE SCHEMA webapp;
 USE webapp;
 
---必要なデータは日付・学習時間・言語・コンテンツ
+CREATE USER 'kazuki'@'mysql' IDENTIFIED BY 'password';
+
+-- 必要なデータは日付・学習時間・言語・コンテンツ
+DROP TABLE IF EXISTS learning_schedule;
 CREATE TABLE learning_schedule
 (
   id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -10,7 +13,7 @@ CREATE TABLE learning_schedule
   learning_time INT(10),
   learning_language VARCHAR(40),
   learning_content VARCHAR(40)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO learning_schedule (learning_date,learning_time,learning_language,learning_content) VALUES
 ('2022-02-01',3,'HTML','ドットインストール'),

@@ -2,7 +2,7 @@
 
 $dsn = 'mysql:host=mysql;dbname=webapp;charset=utf8';
 $user = 'kazuki';
-$password = 'pass';
+$password = 'password';
 
 try{
   $dbh = new PDO($dsn,$user,$password);
