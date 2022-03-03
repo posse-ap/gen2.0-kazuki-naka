@@ -2,6 +2,15 @@
 
 require('./dbconnect.php');
 
+$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2 AND DAY(learning_date)=13');
+$today = $stmt->fetchAll();
+
+$stmt = $dbh->query('SELECT SUM(learning_time) AS week_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2 AND (DAY(learning_date)>=7 AND DAY(learning_date)<=13)');
+$week = $stmt->fetchAll();
+
+$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2');
+$month = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -27,9 +36,9 @@ require('./dbconnect.php');
     <main>
         <div class="left-content">
             <div class="time-display">
-                <div class="learning-time"><p><span class="day">Today</span><br><span class="number">3</span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Month</span><br><span class="number">120</span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Total</span><br><span class="number">1348</span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?=$today[0]['today_learning_time']; ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number"><?=$week[0]['week_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
             </div>
             <div class="graph">
                 <canvas id="myBarChart"></canvas>
@@ -45,7 +54,7 @@ require('./dbconnect.php');
                 <canvas id="myDoughnutChart2"></canvas>
             </div>
         </div>
-        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年3月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
+        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年2月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
     </main>
     <div id="modal">
         <div class="modal-content">
