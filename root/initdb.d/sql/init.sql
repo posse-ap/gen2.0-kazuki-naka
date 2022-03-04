@@ -23,4 +23,5 @@ INSERT INTO learning_schedule (learning_date,learning_time,learning_language,lea
 ('2022-02-13',7,'Laravel','POSSE課題'),
 ('2022-02-15',2,'SQL','POSSE課題'),
 ('2022-02-20',4,'SHELL','POSSE課題'),
-('2022-02-28',3,'情報システム基礎知識(その他)','ドットインストール');
+('2022-02-28',3,'情報システム基礎知識(その他)','ドットインストール'),
+('2022-03-02',4,'HTML','POSSE課題');
