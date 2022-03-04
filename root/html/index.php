@@ -2,14 +2,14 @@
 
 require('./dbconnect.php');
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2 AND DAY(learning_date)=8');
+$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 AND DAY(learning_date)=8');
 $today = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS week_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2 AND (DAY(learning_date)>=7 AND DAY(learning_date)<=13)');
-$week = $stmt->fetchAll();
-
-$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE MONTH(learning_date)=2');
+$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
 $month = $stmt->fetchAll();
+
+$stmt = $dbh->query('SELECT SUM(learning_time) AS total_learning_time FROM learning_schedule');
+$total = $stmt->fetchAll();
 
 ?>
 
@@ -37,8 +37,8 @@ $month = $stmt->fetchAll();
         <div class="left-content">
             <div class="time-display">
                 <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?=$today[0]['today_learning_time']; ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Month</span><br><span class="number"><?=$week[0]['week_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Total</span><br><span class="number"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number"><?=$total[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
             </div>
             <div class="graph">
                 <canvas id="myBarChart"></canvas>
@@ -82,7 +82,7 @@ $month = $stmt->fetchAll();
                             <div class="label"></div><div class="content"><input type="checkbox" id="language5"><label for="language5">Laravel</label></div>
                             <div class="label"></div><div class="content"><input type="checkbox" id="language6"><label for="language6">SQL</label></div>
                             <div class="label"></div><div class="content"><input type="checkbox" id="language7"><label for="language7">SHELL</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language8"><label for="language8">情報システム基礎知識(その他)</label></div>
+                            <div class="label"></div><div class="content"><input type="checkbox" id="language8"><label for="language8">情報システム基礎知識</label></div>
                         </div>
                     </div>
                 </div>
@@ -133,16 +133,16 @@ $month = $stmt->fetchAll();
 
         //トップページの記録・投稿ボタンを押したときの処理
         document.getElementById('top-submit').addEventListener('click', () => {
-        allModalContent.style.display = 'flex';
-        modalSubmit.style.display = 'block';
-        modal.style.display = 'block';
+            allModalContent.style.display = 'flex';
+            modalSubmit.style.display = 'block';
+            modal.style.display = 'block';
         })
 
         //閉じるボタンを押したらトップページに戻る
         closeButton.addEventListener('click', () => {
-        modal.style.display = 'none';
-        spinner.style.display = 'none';
-        document.getElementById('check-mark').style.display = 'none';
+            modal.style.display = 'none';
+            spinner.style.display = 'none';
+            document.getElementById('check-mark').style.display = 'none';
         })
 
         //モーダルページの記録・投稿ボタンを押したらローディング画面表示&Twitter遷移
@@ -150,90 +150,100 @@ $month = $stmt->fetchAll();
         modalSubmit.setAttribute('href', $url);
         let shareButton = document.getElementById('share');
         modalSubmit.addEventListener('click', () => {
-        allModalContent.style.display = 'none';
-        spinner.style.display = 'block';
-        setTimeout(getFinished, 3000);
-        modalSubmit.style.display = 'none';
-        if(shareButton.checked === true){
-            $url += `text=${document.getElementById('twitter-comment').value}`;
-            window.open($url, '_blank');
-        }
+            allModalContent.style.display = 'none';
+            spinner.style.display = 'block';
+            setTimeout(getFinished, 3000);
+            modalSubmit.style.display = 'none';
+            if(shareButton.checked === true){
+                $url += `text=${document.getElementById('twitter-comment').value}`;
+                window.open($url, '_blank');
+            }
         })
 
         //カレンダーアイコンを押したらカレンダー表示
         document.getElementById('calender-icon').addEventListener('click', () => {
-        modalSubmit.style.display = 'none';
-        allModalContent.style.display = 'none';
-        closeButton.style.display = 'none';
-        backButton.style.display = 'block';
-        calender.style.display = 'block';
-        decision.style.display = 'block';
+            modalSubmit.style.display = 'none';
+            allModalContent.style.display = 'none';
+            closeButton.style.display = 'none';
+            backButton.style.display = 'block';
+            calender.style.display = 'block';
+            decision.style.display = 'block';
         })
 
         backButton.addEventListener('click', () => {
-        modalSubmit.style.display = 'block';
-        allModalContent.style.display = 'flex';
-        backButton.style.display = 'none';
-        closeButton.style.display = 'block';
-        calender.style.display = 'none';
-        decision.style.display = 'none';
+            modalSubmit.style.display = 'block';
+            allModalContent.style.display = 'flex';
+            backButton.style.display = 'none';
+            closeButton.style.display = 'block';
+            calender.style.display = 'none';
+            decision.style.display = 'none';
+            chosenCalender.value = ''; //もしカレンダーの日付をクリックした後に戻るボタンを押したら日付は反映されないようにvalueを空にする
         })
 
         //決定ボタンを押した後の実装
         decision.addEventListener('click', () => {
-        decision.style.display = 'none';
-        calender.style.display = 'none';
-        backButton.style.display = 'none';
-        modalSubmit.style.display = 'block';
-        allModalContent.style.display = 'flex';
-        closeButton.style.display = 'block';
-        chosenCalender.style.display = 'block';
+            decision.style.display = 'none';
+            calender.style.display = 'none';
+            backButton.style.display = 'none';
+            modalSubmit.style.display = 'block';
+            allModalContent.style.display = 'flex';
+            closeButton.style.display = 'block';
+            chosenCalender.style.display = 'block';
         })
 
         // 棒グラフの表示
         let ctx = document.getElementById("myBarChart");
-        let myBarChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-        //凡例のラベル
-            labels: [,'2', ,'4', ,'6', ,'8', ,'10', , '12', , '14', ,'16', ,'18', ,'20', , '22', , '24', ,'26', ,'28', ,'30'],
-            datasets: [
-            {
-                label: '学習時間', //データ項目のラベル
-                data: [3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1], //グラフのデータ
-                backgroundColor: 'rgb(15,114,188)',
+        <?php $barData = array(); for($i = 0;$i < 30;$i++){
+            $stmt = $dbh->query("SELECT learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 AND DAY(learning_date)=$i+1");
+            if(!$stmt){
+                array_push($barData,0);
+            }else{
+                $learning_time = $stmt->fetchAll();
+                array_push($barData,$learning_time['learning_time']);
             }
-            ],
-        },
-        options: {
-            scales: {
-            xAxes: [{
-                display: true,
-                stacked: false,
-                gridLines: {
-                display: false
-                }
-            }],
-            yAxes: [{
-                ticks: {
-                suggestedMax: 8, //最大値
-                suggestedMin: 0, //最小値
-                stepSize: 2, //縦ラベルの数値単位
-                callback: function(tick){
-                    return tick.toString() + 'h';
-                }
-                },
-                gridLines: {
-                display: false
-                }
-            }],
+        };?>
+        let myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            //凡例のラベル
+                labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'],
+                datasets: [
+                    {
+                        label: '学習時間', //データ項目のラベル
+                        data: <?= $barData;?>,//[3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1],//グラフのデータ
+                        backgroundColor: 'rgb(15,114,188)',
+                    }
+                ],
             },
-        }
+            options: {
+                scales: {
+                xAxes: [{
+                    display: true,
+                    stacked: false,
+                    gridLines: {
+                    display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                    suggestedMax: 8, //最大値
+                    suggestedMin: 0, //最小値
+                    stepSize: 2, //縦ラベルの数値単位
+                    callback: function(tick){
+                        return tick.toString() + 'h';
+                    }
+                    },
+                    gridLines: {
+                    display: false
+                    }
+                }],
+                },
+            }
         });
 
         //円グラフの表示
         let dataLabelPlugin = {
-        afterDatasetsDraw: function (chart, easing) {
+            afterDatasetsDraw: function (chart, easing) {
             // To only draw at the end of animation, check for easing === 1
             var ctx = chart.ctx;
 
@@ -267,75 +277,75 @@ $month = $stmt->fetchAll();
         }
         let chart1 = document.getElementById("myDoughnutChart1");
         let myDoughnutChart1= new Chart(chart1, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                backgroundColor: [
-                    "#0042E5",
-                    "#0070B9",
-                    "#00BDDB",
-                    "#08CDFA",
-                    "#B29DEF",
-                    "#6C43E5",
-                    "#4609E8",
-                    "#2D00BA"
-                ],
-                data: [5.9, 11.8, 23.5, 14.7,8.8,29.4,5.9,0] //グラフのデータ
-            }],
-            labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
-        },
-        plugins: [dataLabelPlugin],
-        options: {
-            cutoutPercentage: 45,
-            maintainAspectRatio: false,
-            legend:{
-            position: "bottom"
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    backgroundColor: [
+                        "#0042E5",
+                        "#0070B9",
+                        "#00BDDB",
+                        "#08CDFA",
+                        "#B29DEF",
+                        "#6C43E5",
+                        "#4609E8",
+                        "#2D00BA"
+                    ],
+                    data: [5.9, 11.8, 23.5, 14.7,8.8,29.4,5.9,0] //グラフのデータ
+                }],
+                labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
             },
-            tooltips: {
-            callbacks: {
-                label: function (tooltipItem, data) {
-                return data.labels[tooltipItem.index]
-                    + ": "
-                    + data.datasets[0].data[tooltipItem.index]
-                    + " %"; 
+            plugins: [dataLabelPlugin],
+            options: {
+                cutoutPercentage: 45,
+                maintainAspectRatio: false,
+                legend:{
+                position: "bottom"
+                },
+                tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                    return data.labels[tooltipItem.index]
+                        + ": "
+                        + data.datasets[0].data[tooltipItem.index]
+                        + " %"; 
+                    }
                 }
+                },
             }
-            },
-        }
         });
 
         let chart2 = document.getElementById("myDoughnutChart2");
         let myDoughnutChart2= new Chart(chart2, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                backgroundColor: [
-                    "#0042E5",
-                    "#0070B9",
-                    "#00BDDB"
-                ],
-                data: [94.1,0,5.9] //グラフのデータ
-            }],
-            labels: ["ドットインストール","N予備校","POSSE課題"]
-        },
-        plugins: [dataLabelPlugin],
-        options: {
-            cutoutPercentage: 45,
-            maintainAspectRatio: false,
-            legend:{
-            position: "bottom",
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    backgroundColor: [
+                        "#0042E5",
+                        "#0070B9",
+                        "#00BDDB"
+                    ],
+                    data: [94.1,0,5.9] //グラフのデータ
+                }],
+                labels: ["ドットインストール","N予備校","POSSE課題"]
             },
-            tooltips: {
-            callbacks: {
-                label: function (tooltipItem, data) {
-                return data.labels[tooltipItem.index]
-                    + ": "
-                    + data.datasets[0].data[tooltipItem.index]
-                    + " %"; 
+            plugins: [dataLabelPlugin],
+            options: {
+                cutoutPercentage: 45,
+                maintainAspectRatio: false,
+                legend:{
+                position: "bottom",
+                },
+                tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                    return data.labels[tooltipItem.index]
+                        + ": "
+                        + data.datasets[0].data[tooltipItem.index]
+                        + " %"; 
+                    }
+                }
                 }
             }
-            }
-        }
         });
 
         //カレンダーの実装
@@ -400,12 +410,10 @@ $month = $stmt->fetchAll();
                     } else {
                         // 当月の日付を曜日に照らし合わせて設定
                         count++;
-                        if(year == today.getFullYear()
-                        && month == (today.getMonth())
-                        && count == today.getDate()){
-                            calendar += `<td aria-selected="true" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
+                        if(year == today.getFullYear() && month == (today.getMonth()) && count == today.getDate()){
+                            calendar += `<td id="${year}-${month+1}-${count}" aria-selected="true" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
                         } else {
-                            calendar += `<td aria-selected="false" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
+                            calendar += `<td id="${year}-${month+1}-${count}" aria-selected="false" onclick=setDate(${year},${month+1},${count})>` + count + "</td>";
                         }
                     }
                 }
@@ -416,12 +424,16 @@ $month = $stmt->fetchAll();
 
         //3秒ほど経過したら記録完了を表示
         function getFinished(){
-        document.getElementById('check-mark').style.display = 'block';
-        spinner.style.display = 'none';
+            document.getElementById('check-mark').style.display = 'block';
+            spinner.style.display = 'none';
         }
 
         function setDate(year,month,count){
-        chosenCalender.value = `${year}年${month}月${count}日`;
+            let selectedDay = document.getElementById(`${year}-${month}-${count}`);
+            let today = document.querySelector('[aria-selected="true"]');
+            selectedDay.setAttribute("aria-selected",true);
+            today.setAttribute("aria-selected",false);
+            chosenCalender.value = `${year}年${month}月${count}日`;
         }
     </script>
 </body>
