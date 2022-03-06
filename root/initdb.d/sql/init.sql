@@ -25,7 +25,7 @@ INSERT INTO learning_schedule (learning_date,learning_time,learning_language,lea
 ('2022-02-20',4,'SHELL','POSSE課題'),
 ('2022-02-28',3,'情報システム基礎知識','ドットインストール'),
 ('2022-03-02',4,'HTML','POSSE課題'),
-('2022-03-06',4,'SHELL','ドットインストール'),
-('2022-03-12',4,'SQL','N予備校'),
-('2022-03-20',4,'CSS','POSSE課題'),
-('2022-03-28',4,'JavaScript','POSSE課題');
+('2022-03-06',5,'SHELL','ドットインストール'),
+('2022-03-12',6,'SQL','N予備校'),
+('2022-03-20',2,'CSS','POSSE課題'),
+('2022-03-28',5,'JavaScript','POSSE課題');

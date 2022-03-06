@@ -1,3 +1,7 @@
+body{
+  font-family: 
+}
+
 header{
   position: relative;
   height: 64px;
@@ -22,7 +26,6 @@ header{
   top: 23px;
   left: 160px;
   display: inline-block;
-  font-family: "Google Sans", Roboto, arial, sans-serif;
 }
 
 .top-submit{
@@ -32,7 +35,6 @@ header{
   width: 180px;
   border-radius: 20px;
   font-size: 15px;
-  font-family: "Google Sans", Roboto, arial, sans;
   font-weight: 400;
   letter-spacing: 2px;
   text-align: center;
@@ -214,7 +216,6 @@ main{
   border-radius: 30px;
   font-size: 20px;
   letter-spacing: 2px;
-  font-family: "Google Sans", Roboto, arial, sans;
   font-weight: 400;
   text-align: center;
   position: absolute;

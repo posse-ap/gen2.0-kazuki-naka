@@ -11,6 +11,9 @@ $month = $stmt->fetchAll();
 $stmt = $dbh->query('SELECT SUM(learning_time) AS total_learning_time FROM learning_schedule');
 $total = $stmt->fetchAll();
 
+$stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
+$bar_data = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +29,8 @@ $total = $stmt->fetchAll();
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./responsive.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script type="text/javascript" src="https://github.com/nagix/chartjs-plugin-colorschemes/releases/download/v0.2.0/chartjs-plugin-colorschemes.min.js"></script>
 </head>
 <body>
     <header>
@@ -193,25 +198,30 @@ $total = $stmt->fetchAll();
 
         // 棒グラフの表示
         let ctx = document.getElementById("myBarChart");
-        <?php $barData = array(); for($i = 0;$i < 30;$i++){
-            $stmt = $dbh->query("SELECT learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 AND DAY(learning_date)=$i+1");
-            if(!$stmt){
-                array_push($barData,0);
-            }else{
-                $learning_time = $stmt->fetchAll();
-                array_push($barData,$learning_time['learning_time']);
-            }
-        };?>
+        //phpでDBから配列を取り出してjsに渡す
+        let selectedBarData = <?= json_encode($bar_data); ?>;
+        //学習時間の型をstringからnumberに変換
+        for(let i = 0;i < selectedBarData.length;i++){
+            selectedBarData[i]['learning_time'] = Number(selectedBarData[i]['learning_time']);
+        }
+        let barData = Array(30);
+        //配列の初期化
+        for(let i = 0;i < 30;i++){
+            barData[i] = 0;
+        }
+        selectedBarData.forEach(data => {
+            let index = data['date'] - 1; //1日は配列の0番目..という風に番号がずれるため1引く
+            barData[index] = data['learning_time'];
+        });
         let myBarChart = new Chart(ctx, {
             type: 'bar',
             data: {
             //凡例のラベル
-                labels: ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30'],
+                labels: ['','2','','4','','6','','8','','10','','12','','14','','16','','18','','20','','22','','24','','26','','28','','30'],
                 datasets: [
                     {
                         label: '学習時間', //データ項目のラベル
-                        data: <?= $barData;?>,//[3,5,1,3,3,4,6,7,1,4,2,5,7,8,7,3,4,1,1,1,4,2,5,1,6,8,8,2,1,4,1],//グラフのデータ
-                        backgroundColor: 'rgb(15,114,188)',
+                        data: barData, //グラフのデータ
                     }
                 ],
             },
@@ -226,19 +236,19 @@ $total = $stmt->fetchAll();
                 }],
                 yAxes: [{
                     ticks: {
-                    suggestedMax: 8, //最大値
-                    suggestedMin: 0, //最小値
-                    stepSize: 2, //縦ラベルの数値単位
-                    callback: function(tick){
-                        return tick.toString() + 'h';
+                        suggestedMax: 8, //最大値
+                        suggestedMin: 0, //最小値
+                        stepSize: 2, //縦ラベルの数値単位
+                        callback: function(tick){
+                            return tick.toString() + 'h';
                     }
                     },
                     gridLines: {
-                    display: false
+                        display: false
                     }
                 }],
                 },
-            }
+            },
         });
 
         //円グラフの表示
