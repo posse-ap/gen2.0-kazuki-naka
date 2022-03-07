@@ -14,6 +14,12 @@ $total = $stmt->fetchAll();
 $stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
 $bar_data = $stmt->fetchAll();
 
+$stmt = $dbh->query('SELECT learning_language, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language');
+$lang_chart_data = $stmt->fetchAll();
+
+$stmt = $dbh->query('SELECT learning_content, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content');
+$cont_chart_data = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -286,6 +292,16 @@ $bar_data = $stmt->fetchAll();
         }
         }
         let chart1 = document.getElementById("myDoughnutChart1");
+        let selectedChartData1 = <?= json_encode($lang_chart_data); ?>;
+        let monthLearningTime = <?= json_encode($month); ?>;
+        monthLearningTime = Number(monthLearningTime[0]['month_learning_time']);
+        for(let i = 0;i < selectedChartData1.length;i++){
+            selectedChartData1[i]['lang_total_time'] = Number(selectedChartData1[i]['lang_total_time']);
+        }
+        let chartData1 = Array(8);
+        for(let i = 0;i < chartData1.length;i++){
+            chartData1[i] = Math.floor(selectedChartData1[i]['lang_total_time'] * 100 * 10 / monthLearningTime) / 10;
+        }
         let myDoughnutChart1= new Chart(chart1, {
             type: 'doughnut',
             data: {
@@ -300,7 +316,7 @@ $bar_data = $stmt->fetchAll();
                         "#4609E8",
                         "#2D00BA"
                     ],
-                    data: [5.9, 11.8, 23.5, 14.7,8.8,29.4,5.9,0] //グラフのデータ
+                    data: chartData1 //グラフのデータ
                 }],
                 labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
             },
@@ -324,6 +340,14 @@ $bar_data = $stmt->fetchAll();
             }
         });
 
+        let selectedChartData2 = <?= json_encode($cont_chart_data); ?>;
+        for(let i = 0;i < selectedChartData2.length;i++){
+            selectedChartData2[i]['cont_total_time'] = Number(selectedChartData2[i]['cont_total_time']);
+        }
+        let chartData2 = Array(3);
+        for(let i = 0;i < chartData2.length;i++){
+            chartData2[i] = Math.floor(selectedChartData2[i]['cont_total_time'] * 100 * 10 / monthLearningTime) / 10;
+        }
         let chart2 = document.getElementById("myDoughnutChart2");
         let myDoughnutChart2= new Chart(chart2, {
             type: 'doughnut',
@@ -334,7 +358,7 @@ $bar_data = $stmt->fetchAll();
                         "#0070B9",
                         "#00BDDB"
                     ],
-                    data: [94.1,0,5.9] //グラフのデータ
+                    data: chartData2 //グラフのデータ
                 }],
                 labels: ["ドットインストール","N予備校","POSSE課題"]
             },
