@@ -14,10 +14,10 @@ $total = $stmt->fetchAll();
 $stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
 $bar_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_language, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language');
+$stmt = $dbh->query('SELECT learning_language, lang_id, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language, lang_id');
 $lang_chart_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_content, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content');
+$stmt = $dbh->query('SELECT learning_content, cont_id, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content, cont_id');
 $cont_chart_data = $stmt->fetchAll();
 
 ?>
@@ -69,65 +69,67 @@ $cont_chart_data = $stmt->fetchAll();
     </main>
     <div id="modal">
         <div class="modal-content">
-            <div id="all-modal-content">
-                <div class="modal-leftcontent">
-                    <div class="learning-date">
-                        <p>学習日</p>
-                        <div><input type="text" id="calender-input"><i id="calender-icon" class="far fa-calendar-alt calender"></i></div>
-                    </div>
-                    <div class="modal-learning-content">
-                        <p>学習コンテンツ(複数選択可)</p>
-                        <div id="content" class="checkboxes">
-                            <div class="label"></div><div class="content"><input type="checkbox" id="content1" class="content"><label for="content1">N予備校</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="content2" class="content"><label for="content2">ドットインストール</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="content3" class="content"><label for="content3">POSSE課題</label></div>
+            <form method="POST" action="<?php print($_SERVER['PHP_SELF']) ?>">
+                <div id="all-modal-content">
+                    <div class="modal-leftcontent">
+                        <div class="learning-date">
+                            <p>学習日</p>
+                            <div><input type="text" id="calender-input"><i id="calender-icon" class="far fa-calendar-alt calender"></i></div>
+                        </div>
+                        <div class="modal-learning-content">
+                            <p>学習コンテンツ(複数選択可)</p>
+                            <div id="content" class="checkboxes">
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content1" class="content" name="content[]" value="N予備校"><label for="content1">N予備校</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content2" class="content" name="content[]" value="ドットインストール"><label for="content2">ドットインストール</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content3" class="content" name="content[]" value="POSSE課題"><label for="content3">POSSE課題</label></div>
+                            </div>
+                        </div>
+                        <div class="modal-language">
+                            <p>学習言語</p>
+                            <div id="language" class="checkboxes">
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language1" name="language[]" value="HTML"><label for="language1">HTML</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language2" name="language[]" value="CSS"><label for="language2">CSS</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language3" name="language[]" value="JavaScript"><label for="language3">JavaScript</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language4" name="language[]" value="PHP"><label for="language4">PHP</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language5" name="language[]" value="Laravel"><label for="language5">Laravel</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language6" name="language[]" value="SQL"><label for="language6">SQL</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language7" name="language[]" value="SHELL"><label for="language7">SHELL</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language8" name="language[]" value="情報システム基礎知識"><label for="language8">情報システム基礎知識</label></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-language">
-                        <p>学習言語</p>
-                        <div id="language" class="checkboxes">
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language1"><label for="language1">HTML</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language2"><label for="language2">CSS</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language3"><label for="language3">JavaScript</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language4"><label for="language4">PHP</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language5"><label for="language5">Laravel</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language6"><label for="language6">SQL</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language7"><label for="language7">SHELL</label></div>
-                            <div class="label"></div><div class="content"><input type="checkbox" id="language8"><label for="language8">情報システム基礎知識</label></div>
+                    <div class="modal-rightcontent">
+                        <div class="modal-time">
+                            <p>学習時間</p>
+                            <input type="text" class="modal-time-learning">
+                        </div>
+                        <div class="commentbox">
+                            <p>Twitter用コメント</p>
+                            <div><input type="text" id="twitter-comment"></div>
+                        </div>
+                        <div class="share-button">
+                            <input id="share" type="checkbox"><label for="share">Twitterにシェアする</label>
                         </div>
                     </div>
                 </div>
-                <div class="modal-rightcontent">
-                    <div class="modal-time">
-                        <p>学習時間</p>
-                        <input type="text" class="modal-time-learning">
+                <button href="" id="modal-submit" class="button">記録・投稿</button>
+                <div id="back-button" class="back">←</div>
+                <div id="close-button" class="close">×</div>
+                <div id="spinner" class="dot-spin"></div>
+                <div id="check-mark" class="finished"><i class="fas fa-check fa-fw checked"></i>記録・投稿完了しました！</div>
+                <div id="calender-wrapper" class="wrapper">
+                    <!-- xxxx年xx月を表示 -->
+                    <h1 id="header"></h1>
+                    <!-- ボタンクリックで月移動 -->
+                    <div id="next-prev-button">
+                        <button id="prev" onclick="prev()">‹</button>
+                        <button id="next" onclick="next()">›</button>
                     </div>
-                    <div class="commentbox">
-                        <p>Twitter用コメント</p>
-                        <div><input type="text" id="twitter-comment"></div>
-                    </div>
-                    <div class="share-button">
-                        <input id="share" type="checkbox"><label for="share">Twitterにシェアする</label>
-                    </div>
+                    <!-- カレンダー -->
+                    <div id="calendar"></div>
+                    <button id="decision" class="button">決定</button>
                 </div>
-            </div>
-            <button href="" id="modal-submit" class="button">記録・投稿</button>
-            <div id="back-button" class="back">←</div>
-            <div id="close-button" class="close">×</div>
-            <div id="spinner" class="dot-spin"></div>
-            <div id="check-mark" class="finished"><i class="fas fa-check fa-fw checked"></i>記録・投稿完了しました！</div>
-            <div id="calender-wrapper" class="wrapper">
-                <!-- xxxx年xx月を表示 -->
-                <h1 id="header"></h1>
-                <!-- ボタンクリックで月移動 -->
-                <div id="next-prev-button">
-                    <button id="prev" onclick="prev()">‹</button>
-                    <button id="next" onclick="next()">›</button>
-                </div>
-                <!-- カレンダー -->
-                <div id="calendar"></div>
-                <button id="decision" class="button">決定</button>
-            </div>
+            </form>
         </div>
     </div>
     <script>
@@ -297,11 +299,16 @@ $cont_chart_data = $stmt->fetchAll();
         monthLearningTime = Number(monthLearningTime[0]['month_learning_time']);
         for(let i = 0;i < selectedChartData1.length;i++){
             selectedChartData1[i]['lang_total_time'] = Number(selectedChartData1[i]['lang_total_time']);
+            selectedChartData1[i]['lang_id'] = Number(selectedChartData1[i]['lang_id']);
         }
         let chartData1 = Array(8);
         for(let i = 0;i < chartData1.length;i++){
-            chartData1[i] = Math.floor(selectedChartData1[i]['lang_total_time'] * 100 * 10 / monthLearningTime) / 10;
+            chartData1[i] = 0;
         }
+        selectedChartData1.forEach(data => {
+            let index = data['lang_id'] - 1;
+            chartData1[index] = Math.floor(data['lang_total_time'] * 100 * 10 / monthLearningTime) / 10;
+        })
         let myDoughnutChart1= new Chart(chart1, {
             type: 'doughnut',
             data: {
@@ -325,7 +332,7 @@ $cont_chart_data = $stmt->fetchAll();
                 cutoutPercentage: 45,
                 maintainAspectRatio: false,
                 legend:{
-                position: "bottom"
+                    position: "bottom"
                 },
                 tooltips: {
                 callbacks: {
@@ -346,8 +353,12 @@ $cont_chart_data = $stmt->fetchAll();
         }
         let chartData2 = Array(3);
         for(let i = 0;i < chartData2.length;i++){
-            chartData2[i] = Math.floor(selectedChartData2[i]['cont_total_time'] * 100 * 10 / monthLearningTime) / 10;
+            chartData2[i] = 0;
         }
+        selectedChartData2.forEach(data => {
+            let index = data['cont_id'] - 1;
+            chartData2[index] = Math.floor(data['cont_total_time'] * 100 * 10 / monthLearningTime) / 10;
+        })
         let chart2 = document.getElementById("myDoughnutChart2");
         let myDoughnutChart2= new Chart(chart2, {
             type: 'doughnut',
@@ -367,7 +378,7 @@ $cont_chart_data = $stmt->fetchAll();
                 cutoutPercentage: 45,
                 maintainAspectRatio: false,
                 legend:{
-                position: "bottom",
+                    position: "bottom",
                 },
                 tooltips: {
                 callbacks: {
