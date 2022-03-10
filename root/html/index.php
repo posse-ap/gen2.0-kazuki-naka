@@ -14,10 +14,10 @@ $total = $stmt->fetchAll();
 $stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
 $bar_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_language, lang_id, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language, lang_id');
+$stmt = $dbh->query('SELECT learning_language, lang_color, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language, lang_color ORDER BY lang_total_time desc');
 $lang_chart_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_content, cont_id, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content, cont_id');
+$stmt = $dbh->query('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
 $cont_chart_data = $stmt->fetchAll();
 
 ?>
@@ -69,7 +69,6 @@ $cont_chart_data = $stmt->fetchAll();
     </main>
     <div id="modal">
         <div class="modal-content">
-            <form method="POST" action="<?php print($_SERVER['PHP_SELF']) ?>">
                 <div id="all-modal-content">
                     <div class="modal-leftcontent">
                         <div class="learning-date">
@@ -79,9 +78,9 @@ $cont_chart_data = $stmt->fetchAll();
                         <div class="modal-learning-content">
                             <p>学習コンテンツ(複数選択可)</p>
                             <div id="content" class="checkboxes">
-                                <div class="label"></div><div class="content"><input type="checkbox" id="content1" class="content" name="content[]" value="N予備校"><label for="content1">N予備校</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="content2" class="content" name="content[]" value="ドットインストール"><label for="content2">ドットインストール</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="content3" class="content" name="content[]" value="POSSE課題"><label for="content3">POSSE課題</label></div>
+                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content1" class="content" name="content[]" value="N予備校"></form><label for="content1">N予備校</label></div>
+                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content2" class="content" name="content[]" value="ドットインストール"></form><label for="content2">ドットインストール</label></div>
+                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content3" class="content" name="content[]" value="POSSE課題"></form><label for="content3">POSSE課題</label></div>
                             </div>
                         </div>
                         <div class="modal-language">
@@ -129,7 +128,6 @@ $cont_chart_data = $stmt->fetchAll();
                     <div id="calendar"></div>
                     <button id="decision" class="button">決定</button>
                 </div>
-            </form>
         </div>
     </div>
     <script>
@@ -297,35 +295,25 @@ $cont_chart_data = $stmt->fetchAll();
         let selectedChartData1 = <?= json_encode($lang_chart_data); ?>;
         let monthLearningTime = <?= json_encode($month); ?>;
         monthLearningTime = Number(monthLearningTime[0]['month_learning_time']);
-        for(let i = 0;i < selectedChartData1.length;i++){
-            selectedChartData1[i]['lang_total_time'] = Number(selectedChartData1[i]['lang_total_time']);
-            selectedChartData1[i]['lang_id'] = Number(selectedChartData1[i]['lang_id']);
-        }
-        let chartData1 = Array(8);
+        let backgroundColorDataForLang = new Array(); //背景色のデータ
+        let langLabel = new Array(); //言語の種類のデータ
+        let chartData1 = new Array(); //学習時間のデータ
         for(let i = 0;i < chartData1.length;i++){
             chartData1[i] = 0;
         }
         selectedChartData1.forEach(data => {
-            let index = data['lang_id'] - 1;
-            chartData1[index] = Math.floor(data['lang_total_time'] * 100 * 10 / monthLearningTime) / 10;
+            backgroundColorDataForLang.push(data['lang_color']);
+            langLabel.push(data['learning_language']);
+            chartData1.push(Math.floor(Number(data['lang_total_time']) * 100 * 10 / monthLearningTime) / 10);
         })
         let myDoughnutChart1= new Chart(chart1, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    backgroundColor: [
-                        "#0042E5",
-                        "#0070B9",
-                        "#00BDDB",
-                        "#08CDFA",
-                        "#B29DEF",
-                        "#6C43E5",
-                        "#4609E8",
-                        "#2D00BA"
-                    ],
+                    backgroundColor: backgroundColorDataForLang,
                     data: chartData1 //グラフのデータ
                 }],
-                labels: ["HTML","CSS","JavaScript","PHP","Laravel","SQL","SHELL","情報システム基礎知識(その他)"]
+                labels: langLabel
             },
             plugins: [dataLabelPlugin],
             options: {
@@ -351,27 +339,26 @@ $cont_chart_data = $stmt->fetchAll();
         for(let i = 0;i < selectedChartData2.length;i++){
             selectedChartData2[i]['cont_total_time'] = Number(selectedChartData2[i]['cont_total_time']);
         }
-        let chartData2 = Array(3);
+        let backgroundColorDataForCont = new Array(); //背景色のデータ
+        let contLabel = new Array(); //コンテンツの種類のデータ
+        let chartData2 = new Array(); //学習時間のデータ
         for(let i = 0;i < chartData2.length;i++){
             chartData2[i] = 0;
         }
         selectedChartData2.forEach(data => {
-            let index = data['cont_id'] - 1;
-            chartData2[index] = Math.floor(data['cont_total_time'] * 100 * 10 / monthLearningTime) / 10;
+            backgroundColorDataForCont.push(data['cont_color']);
+            contLabel.push(data['learning_content']);
+            chartData2.push(Math.floor(Number(data['cont_total_time']) * 100 * 10 / monthLearningTime) / 10);
         })
         let chart2 = document.getElementById("myDoughnutChart2");
         let myDoughnutChart2= new Chart(chart2, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    backgroundColor: [
-                        "#0042E5",
-                        "#0070B9",
-                        "#00BDDB"
-                    ],
+                    backgroundColor: backgroundColorDataForCont,
                     data: chartData2 //グラフのデータ
                 }],
-                labels: ["ドットインストール","N予備校","POSSE課題"]
+                labels: contLabel
             },
             plugins: [dataLabelPlugin],
             options: {

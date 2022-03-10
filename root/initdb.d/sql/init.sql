@@ -12,22 +12,22 @@ CREATE TABLE learning_schedule
   learning_date DATE,
   learning_time INT(10),
   learning_language VARCHAR(40),
-  lang_id INT(10),
+  lang_color VARCHAR(40),
   learning_content VARCHAR(40),
-  cont_id INT(10)
+  cont_color VARCHAR(40)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO learning_schedule (learning_date,learning_time,learning_language,lang_id,learning_content,cont_id) VALUES
-('2022-02-01',3,'HTML',1,'ドットインストール',1),
-('2022-02-04',4,'CSS',2,'POSSE課題',3),
-('2022-02-07',4,'JavaScript',3,'N予備校',2),
-('2022-02-08',5,'PHP',4,'N予備校',2),
-('2022-02-13',7,'Laravel',5,'POSSE課題',3),
-('2022-02-15',2,'SQL',6,'POSSE課題',3),
-('2022-02-20',4,'SHELL',7,'POSSE課題',3),
-('2022-02-28',3,'情報システム基礎知識',8,'ドットインストール',1),
-('2022-03-02',4,'HTML',1,'POSSE課題',3),
-('2022-03-06',5,'SHELL',7,'ドットインストール',1),
-('2022-03-12',6,'SQL',6,'N予備校',2),
-('2022-03-20',2,'CSS',2,'POSSE課題',3),
-('2022-03-28',5,'JavaScript',3,'POSSE課題',3);
+INSERT INTO learning_schedule (learning_date,learning_time,learning_language,lang_color,learning_content,cont_color) VALUES
+('2022-02-01',3,'HTML','#0042E5','ドットインストール','#0042E5'),
+('2022-02-04',4,'CSS','#0070B9','POSSE課題','#00BDDB'),
+('2022-02-07',4,'JavaScript','#00BDDB','N予備校','#0070B9'),
+('2022-02-08',5,'PHP','#08CDFA','N予備校','#0070B9'),
+('2022-02-13',7,'Laravel','#B29DEF','POSSE課題','#00BDDB'),
+('2022-02-15',2,'SQL','#6C43E5','POSSE課題','#00BDDB'),
+('2022-02-20',4,'SHELL','#4609E8','POSSE課題','#00BDDB'),
+('2022-02-28',3,'情報システム基礎知識','#2D00BA','ドットインストール','#0042E5'),
+('2022-03-02',4,'HTML','#0042E5','POSSE課題','#00BDDB'),
+('2022-03-06',5,'SHELL','#4609E8','ドットインストール','#0042E5'),
+('2022-03-12',6,'SQL','#6C43E5','N予備校','#0070B9'),
+('2022-03-20',2,'CSS','#0070B9','POSSE課題','#00BDDB'),
+('2022-03-28',5,'JavaScript','#00BDDB','POSSE課題','#00BDDB');
