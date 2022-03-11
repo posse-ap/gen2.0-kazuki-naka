@@ -2,22 +2,22 @@
 
 require('./dbconnect.php');
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 AND DAY(learning_date)=8');
+$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 AND DAY(learning_date)=6');
 $today = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
+$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
 $month = $stmt->fetchAll();
 
 $stmt = $dbh->query('SELECT SUM(learning_time) AS total_learning_time FROM learning_schedule');
 $total = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2');
+$stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
 $bar_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_language, lang_color, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_language, lang_color ORDER BY lang_total_time desc');
+$stmt = $dbh->query('SELECT learning_language, lang_color, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_language, lang_color ORDER BY lang_total_time desc');
 $lang_chart_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=2 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
+$stmt = $dbh->query('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
 $cont_chart_data = $stmt->fetchAll();
 
 ?>
@@ -65,7 +65,7 @@ $cont_chart_data = $stmt->fetchAll();
                 <canvas id="myDoughnutChart2"></canvas>
             </div>
         </div>
-        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年2月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
+        <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年3月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
     </main>
     <div id="modal">
         <div class="modal-content">
@@ -78,29 +78,29 @@ $cont_chart_data = $stmt->fetchAll();
                         <div class="modal-learning-content">
                             <p>学習コンテンツ(複数選択可)</p>
                             <div id="content" class="checkboxes">
-                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content1" class="content" name="content[]" value="N予備校"></form><label for="content1">N予備校</label></div>
-                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content2" class="content" name="content[]" value="ドットインストール"></form><label for="content2">ドットインストール</label></div>
-                                <div class="label"></div><div class="content"><form method="POST" action=""><input type="checkbox" id="content3" class="content" name="content[]" value="POSSE課題"></form><label for="content3">POSSE課題</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content1" class="content" name="content" value="N予備校"><label for="content1">N予備校</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content2" class="content" name="content" value="ドットインストール"><label for="content2">ドットインストール</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="content3" class="content" name="content" value="POSSE課題"><label for="content3">POSSE課題</label></div>
                             </div>
                         </div>
                         <div class="modal-language">
                             <p>学習言語</p>
                             <div id="language" class="checkboxes">
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language1" name="language[]" value="HTML"><label for="language1">HTML</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language2" name="language[]" value="CSS"><label for="language2">CSS</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language3" name="language[]" value="JavaScript"><label for="language3">JavaScript</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language4" name="language[]" value="PHP"><label for="language4">PHP</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language5" name="language[]" value="Laravel"><label for="language5">Laravel</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language6" name="language[]" value="SQL"><label for="language6">SQL</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language7" name="language[]" value="SHELL"><label for="language7">SHELL</label></div>
-                                <div class="label"></div><div class="content"><input type="checkbox" id="language8" name="language[]" value="情報システム基礎知識"><label for="language8">情報システム基礎知識</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language1" name="language" value="HTML"><label for="language1">HTML</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language2" name="language" value="CSS"><label for="language2">CSS</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language3" name="language" value="JavaScript"><label for="language3">JavaScript</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language4" name="language" value="PHP"><label for="language4">PHP</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language5" name="language" value="Laravel"><label for="language5">Laravel</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language6" name="language" value="SQL"><label for="language6">SQL</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language7" name="language" value="SHELL"><label for="language7">SHELL</label></div>
+                                <div class="label"></div><div class="content"><input type="checkbox" id="language8" name="language" value="情報システム基礎知識"><label for="language8">情報システム基礎知識</label></div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-rightcontent">
                         <div class="modal-time">
                             <p>学習時間</p>
-                            <input type="text" class="modal-time-learning">
+                            <input type="text" class="modal-time-learning" id="time">
                         </div>
                         <div class="commentbox">
                             <p>Twitter用コメント</p>
@@ -156,21 +156,6 @@ $cont_chart_data = $stmt->fetchAll();
             document.getElementById('check-mark').style.display = 'none';
         })
 
-        //モーダルページの記録・投稿ボタンを押したらローディング画面表示&Twitter遷移
-        let $url = 'https://twitter.com/intent/tweet?';
-        modalSubmit.setAttribute('href', $url);
-        let shareButton = document.getElementById('share');
-        modalSubmit.addEventListener('click', () => {
-            allModalContent.style.display = 'none';
-            spinner.style.display = 'block';
-            setTimeout(getFinished, 3000);
-            modalSubmit.style.display = 'none';
-            if(shareButton.checked === true){
-                $url += `text=${document.getElementById('twitter-comment').value}`;
-                window.open($url, '_blank');
-            }
-        })
-
         //カレンダーアイコンを押したらカレンダー表示
         document.getElementById('calender-icon').addEventListener('click', () => {
             modalSubmit.style.display = 'none';
@@ -219,7 +204,8 @@ $cont_chart_data = $stmt->fetchAll();
             let index = data['date'] - 1; //1日は配列の0番目..という風に番号がずれるため1引く
             barData[index] = data['learning_time'];
         });
-        let myBarChart = new Chart(ctx, {
+        function showBarChart(){
+            let myBarChart = new Chart(ctx, {
             type: 'bar',
             data: {
             //凡例のラベル
@@ -247,7 +233,7 @@ $cont_chart_data = $stmt->fetchAll();
                         stepSize: 2, //縦ラベルの数値単位
                         callback: function(tick){
                             return tick.toString() + 'h';
-                    }
+                        }
                     },
                     gridLines: {
                         display: false
@@ -255,7 +241,9 @@ $cont_chart_data = $stmt->fetchAll();
                 }],
                 },
             },
-        });
+            });
+        }
+        showBarChart();
 
         //円グラフの表示
         let dataLabelPlugin = {
@@ -306,7 +294,9 @@ $cont_chart_data = $stmt->fetchAll();
             langLabel.push(data['learning_language']);
             chartData1.push(Math.floor(Number(data['lang_total_time']) * 100 * 10 / monthLearningTime) / 10);
         })
-        let myDoughnutChart1= new Chart(chart1, {
+
+        function showDoughnutChart1(){
+            let myDoughnutChart1= new Chart(chart1, {
             type: 'doughnut',
             data: {
                 datasets: [{
@@ -333,7 +323,9 @@ $cont_chart_data = $stmt->fetchAll();
                 }
                 },
             }
-        });
+            });
+        }
+        showDoughnutChart1();
 
         let selectedChartData2 = <?= json_encode($cont_chart_data); ?>;
         for(let i = 0;i < selectedChartData2.length;i++){
@@ -351,7 +343,9 @@ $cont_chart_data = $stmt->fetchAll();
             chartData2.push(Math.floor(Number(data['cont_total_time']) * 100 * 10 / monthLearningTime) / 10);
         })
         let chart2 = document.getElementById("myDoughnutChart2");
-        let myDoughnutChart2= new Chart(chart2, {
+
+        function showDoughnutChart2(){
+            let myDoughnutChart2= new Chart(chart2, {
             type: 'doughnut',
             data: {
                 datasets: [{
@@ -378,7 +372,122 @@ $cont_chart_data = $stmt->fetchAll();
                 }
                 }
             }
-        });
+            });
+        }
+        showDoughnutChart2();
+
+        //自動リロード
+        function doReload(){
+            window.location.reload;
+        }
+
+        //モーダルページ消える関数
+        function disappearModal(){
+            modalSubmit.style.display = 'none';
+            modal.style.display = 'none';
+        }
+
+        //モーダルページの記録・投稿ボタンを押したときの処理
+        let $url = 'https://twitter.com/intent/tweet?';
+        modalSubmit.setAttribute('href', $url);
+        let shareButton = document.getElementById('share');
+        modalSubmit.addEventListener('click', () => {
+            allModalContent.style.display = 'none';
+            spinner.style.display = 'block';
+            setTimeout(getFinished, 3000);
+            modalSubmit.style.display = 'none';
+            if(shareButton.checked === true){
+                $url += `text=${document.getElementById('twitter-comment').value}`;
+                window.open($url, '_blank');
+            }
+            setTimeout(disappearModal,4000);
+            setTimeout(doReload, 5000);
+            let year = Number(chosenCalender.value.substr(0,4));
+            let month = chosenCalender.value.substr(5,2);
+            let day = chosenCalender.value.substr(8,2);
+            if(month[0] == '0'){
+                month = Number(month[1]);
+            }else{
+                month = Number(month);
+            }
+            if(day[0] == '0'){
+                day = Number(day[1]);
+            }else{
+                day = Number(day);
+            }
+            const time = Number(document.getElementById("time").value);
+            barData[day - 1] += time;
+            setTimeout(showBarChart,5000);
+            const language = document.getElementsByName("language");
+            const checkedLanguage = [];
+            for(let i = 0;i < language.length;i++){
+                if(language[i].checked){
+                    checkedLanguage.push(language[i].value);
+                }
+            }
+            if(langLabel.indexOf(checkedLanguage[0]) != -1){
+                chartData1[langLabel.indexOf(checkedLanguage[0])] = Math.floor(((chartData1[langLabel.indexOf(checkedLanguage[0])] * monthLearningTime /100) + time) * 100 * 10 / monthLearningTime) / 10;
+            }else{
+                let color;
+                switch(checkedLanguage[0]){
+                    case 'HTML':
+                        color = '0042E5';
+                        break;
+                    case 'CSS':
+                        color = '#0070B9';
+                        break;
+                    case 'JavaScript':
+                        color = '#00BDDB';
+                        break;
+                    case 'PHP':
+                        color = '#08CDFA';
+                        break;
+                    case 'Laravel':
+                        color = '#B29DEF';
+                        break;
+                    case 'SQL':
+                        color = '#6C43E5';
+                        break;
+                    case 'SHELL':
+                        color = '#4609E8';
+                        break;
+                    default:
+                        color = '#2D00BA';
+                        break;
+                }
+                backgroundColorDataForLang.push(color);
+                langLabel.push(checkedLanguage[0]);
+                chartData1.push(Math.floor(time * 100 * 10 / monthLearningTime) / 10);
+            }
+            setTimeout(showDoughnutChart1,5000);
+            const content = document.getElementsByName("content");
+            const checkedContent = [];
+            for(let i = 0;i < content.length;i++){
+                if(content[i].checked){
+                    checkedContent.push(content[i].value);
+                }
+            }
+            if(contLabel.indexOf(checkedContent[0]) != -1){
+                chartData2[contLabel.indexOf(checkedContent[0])] = Math.floor(((chartData2[contLabel.indexOf(checkedContent[0])] * monthLearningTime /100) + time) * 100 * 10 / monthLearningTime) / 10;
+            }else{
+                let color;
+                switch(checkedContent[0]){
+                    case 'ドットインストール':
+                        color = '#0042E5';
+                        break;
+                    case 'N予備校':
+                        color = '#0070B9';
+                        break;
+                    default:
+                        color = '#00BDDB';
+                        break;
+                }
+                backgroundColorDataForCont.push(color);
+                contLabel.push(checkedContent[0]);
+                chartData2.push(Math.floor(time * 100 * 10 / monthLearningTime) / 10);
+            }
+            setTimeout(showDoughnutChart2,5000);
+        })
 
         //カレンダーの実装
         const week = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -465,7 +574,15 @@ $cont_chart_data = $stmt->fetchAll();
             let today = document.querySelector('[aria-selected="true"]');
             selectedDay.setAttribute("aria-selected",true);
             today.setAttribute("aria-selected",false);
-            chosenCalender.value = `${year}年${month}月${count}日`;
+            if((month > 0 && month < 10) && (count > 0 && count < 10)){
+                chosenCalender.value = `${year}年0${month}月0${count}日`;
+            }else if(month > 0 && month < 10){
+                chosenCalender.value = `${year}年0${month}月${count}日`;
+            }else if(count > 0 && count < 10){
+                chosenCalender.value = `${year}年${month}月0${count}日`;
+            }else{
+                chosenCalender.value = `${year}年${month}月${count}日`;
+            }
         }
     </script>
 </body>
