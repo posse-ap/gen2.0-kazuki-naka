@@ -48,8 +48,8 @@ $cont_chart_data = $stmt->fetchAll();
         <div class="left-content">
             <div class="time-display">
                 <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?=$today[0]['today_learning_time']; ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Month</span><br><span class="number"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Total</span><br><span class="number"><?=$total[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?=$total[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
             </div>
             <div class="graph">
                 <canvas id="myBarChart"></canvas>
@@ -111,7 +111,8 @@ $cont_chart_data = $stmt->fetchAll();
                         </div>
                     </div>
                 </div>
-                <button href="" id="modal-submit" class="button">記録・投稿</button>
+                <!-- <button href="" id="modal-submit" class="button">記録・投稿</button> -->
+                <input type="submit" id="modal-submit" class="button" value="記録・投稿">
                 <div id="back-button" class="back">←</div>
                 <div id="close-button" class="close">×</div>
                 <div id="spinner" class="dot-spin"></div>
@@ -282,7 +283,9 @@ $cont_chart_data = $stmt->fetchAll();
         let chart1 = document.getElementById("myDoughnutChart1");
         let selectedChartData1 = <?= json_encode($lang_chart_data); ?>;
         let monthLearningTime = <?= json_encode($month); ?>;
+        let totalLearningTime = <?= json_encode($total); ?>;
         monthLearningTime = Number(monthLearningTime[0]['month_learning_time']);
+        totalLearningTime = Number(totalLearningTime[0]['total_learning_time']);
         let backgroundColorDataForLang = new Array(); //背景色のデータ
         let langLabel = new Array(); //言語の種類のデータ
         let chartData1 = new Array(); //学習時間のデータ
@@ -417,6 +420,8 @@ $cont_chart_data = $stmt->fetchAll();
             }
             const time = Number(document.getElementById("time").value);
             barData[day - 1] += time;
+            monthLearningTime += time;
+            totalLearningTime += time;
             setTimeout(showBarChart,5000);
             const language = document.getElementsByName("language");
             const checkedLanguage = [];
@@ -487,6 +492,20 @@ $cont_chart_data = $stmt->fetchAll();
                 chartData2.push(Math.floor(time * 100 * 10 / monthLearningTime) / 10);
             }
             setTimeout(showDoughnutChart2,5000);
+
+            setTimeout(() => {
+                document.getElementById('check-mark').style.display = 'none';
+                chosenCalender.value = '';
+                for(let i = 0;i < language.length;i++){
+                    language[i].checked = false;
+                }
+                for(let i = 0;i < content.length;i++){
+                    content[i].checked = false;
+                }
+                document.getElementById("time").value = '';
+                document.getElementById("month").textContent = monthLearningTime;
+                document.getElementById("total").textContent = totalLearningTime;
+            },5000);
         })
 
         //カレンダーの実装
