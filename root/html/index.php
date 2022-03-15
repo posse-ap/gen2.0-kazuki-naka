@@ -1,15 +1,18 @@
 <?php
 
-require('./dbconnect.php');
+require_once(__DIR__ . '/dbconnect.php');
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 AND DAY(learning_date)=6');
-$today = $stmt->fetchAll();
+$today = date("Y-m-d");
+$stmt = $dbh->prepare('SELECT SUM(learning_time) AS today_learning_time FROM learning_schedule WHERE learning_date=:today');
+$stmt->bindParam(':today',$today);
+$stmt->execute();
+$today_time = $stmt->fetchAll();
 
 $stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
-$month = $stmt->fetchAll();
+$month_time = $stmt->fetchAll();
 
 $stmt = $dbh->query('SELECT SUM(learning_time) AS total_learning_time FROM learning_schedule');
-$total = $stmt->fetchAll();
+$total_time = $stmt->fetchAll();
 
 $stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
 $bar_data = $stmt->fetchAll();
@@ -47,9 +50,9 @@ $cont_chart_data = $stmt->fetchAll();
     <main>
         <div class="left-content">
             <div class="time-display">
-                <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?=$today[0]['today_learning_time']; ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?=$month[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?=$total[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?if($today_time[0]['today_learning_time']){echo $today_time[0]['today_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?=$month_time[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?=$total_time[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
             </div>
             <div class="graph">
                 <canvas id="myBarChart"></canvas>
@@ -111,7 +114,6 @@ $cont_chart_data = $stmt->fetchAll();
                         </div>
                     </div>
                 </div>
-                <!-- <button href="" id="modal-submit" class="button">記録・投稿</button> -->
                 <input type="submit" id="modal-submit" class="button" value="記録・投稿">
                 <div id="back-button" class="back">←</div>
                 <div id="close-button" class="close">×</div>
@@ -282,8 +284,8 @@ $cont_chart_data = $stmt->fetchAll();
         }
         let chart1 = document.getElementById("myDoughnutChart1");
         let selectedChartData1 = <?= json_encode($lang_chart_data); ?>;
-        let monthLearningTime = <?= json_encode($month); ?>;
-        let totalLearningTime = <?= json_encode($total); ?>;
+        let monthLearningTime = <?= json_encode($month_time); ?>;
+        let totalLearningTime = <?= json_encode($total_time); ?>;
         monthLearningTime = Number(monthLearningTime[0]['month_learning_time']);
         totalLearningTime = Number(totalLearningTime[0]['total_learning_time']);
         let backgroundColorDataForLang = new Array(); //背景色のデータ
