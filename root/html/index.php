@@ -8,19 +8,33 @@ $stmt->bindParam(':today',$today);
 $stmt->execute();
 $today_time = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
+$year = date("Y"); //今年
+$month = date("m"); //今月
+$stmt = $dbh->prepare('SELECT SUM(learning_time) AS month_learning_time FROM learning_schedule WHERE YEAR(learning_date)=:year AND MONTH(learning_date)=:month');
+$stmt->bindParam(':year',$year);
+$stmt->bindParam(':month',$month);
+$stmt->execute();
 $month_time = $stmt->fetchAll();
 
 $stmt = $dbh->query('SELECT SUM(learning_time) AS total_learning_time FROM learning_schedule');
 $total_time = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3');
+$stmt = $dbh->prepare('SELECT DAY(learning_date) AS date, learning_time FROM learning_schedule WHERE YEAR(learning_date)=:year AND MONTH(learning_date)=:month');
+$stmt->bindParam(':year',$year);
+$stmt->bindParam(':month',$month);
+$stmt->execute();
 $bar_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_language, lang_color, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_language, lang_color ORDER BY lang_total_time desc');
+$stmt = $dbh->prepare('SELECT learning_language, lang_color, SUM(learning_time) AS lang_total_time FROM learning_schedule WHERE YEAR(learning_date)=:year AND MONTH(learning_date)=:month GROUP BY learning_language, lang_color ORDER BY lang_total_time desc');
+$stmt->bindParam(':year',$year);
+$stmt->bindParam(':month',$month);
+$stmt->execute();
 $lang_chart_data = $stmt->fetchAll();
 
-$stmt = $dbh->query('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
+$stmt = $dbh->prepare('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
+$stmt->bindParam(':year',$year);
+$stmt->bindParam(':month',$month);
+$stmt->execute();
 $cont_chart_data = $stmt->fetchAll();
 
 ?>
@@ -41,7 +55,7 @@ $cont_chart_data = $stmt->fetchAll();
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script type="text/javascript" src="https://github.com/nagix/chartjs-plugin-colorschemes/releases/download/v0.2.0/chartjs-plugin-colorschemes.min.js"></script>
 </head>
-<body>
+<body style="font-family: Noto Sans Japanese;">
     <header>
         <img src="./image/logo.jpg" alt="POSSE" class="logo">
         <p class="subtitle">4th week</p>
@@ -51,8 +65,8 @@ $cont_chart_data = $stmt->fetchAll();
         <div class="left-content">
             <div class="time-display">
                 <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?if($today_time[0]['today_learning_time']){echo $today_time[0]['today_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?=$month_time[0]['month_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
-                <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?=$total_time[0]['total_learning_time'] ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?if($month_time[0]['month_learning_time']){echo $month_time[0]['month_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?if($total_time[0]['total_learning_time']){echo $total_time[0]['total_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
             </div>
             <div class="graph">
                 <canvas id="myBarChart"></canvas>
@@ -76,7 +90,7 @@ $cont_chart_data = $stmt->fetchAll();
                     <div class="modal-leftcontent">
                         <div class="learning-date">
                             <p>学習日</p>
-                            <div><input type="text" id="calender-input"><i id="calender-icon" class="far fa-calendar-alt calender"></i></div>
+                            <div><input type="text" id="calender-input" name="date"><i id="calender-icon" class="far fa-calendar-alt calender"></i></div>
                         </div>
                         <div class="modal-learning-content">
                             <p>学習コンテンツ(複数選択可)</p>
@@ -103,7 +117,7 @@ $cont_chart_data = $stmt->fetchAll();
                     <div class="modal-rightcontent">
                         <div class="modal-time">
                             <p>学習時間</p>
-                            <input type="text" class="modal-time-learning" id="time">
+                            <input type="text" class="modal-time-learning" id="time" name="study-time">
                         </div>
                         <div class="commentbox">
                             <p>Twitter用コメント</p>
@@ -231,7 +245,7 @@ $cont_chart_data = $stmt->fetchAll();
                 }],
                 yAxes: [{
                     ticks: {
-                        suggestedMax: 8, //最大値
+                        suggestedMax: 12, //最大値
                         suggestedMin: 0, //最小値
                         stepSize: 2, //縦ラベルの数値単位
                         callback: function(tick){
@@ -299,7 +313,6 @@ $cont_chart_data = $stmt->fetchAll();
             langLabel.push(data['learning_language']);
             chartData1.push(Math.floor(Number(data['lang_total_time']) * 100 * 10 / monthLearningTime) / 10);
         })
-
         function showDoughnutChart1(){
             let myDoughnutChart1= new Chart(chart1, {
             type: 'doughnut',
@@ -433,8 +446,17 @@ $cont_chart_data = $stmt->fetchAll();
                 }
             }
             if(langLabel.indexOf(checkedLanguage[0]) != -1){
-                chartData1[langLabel.indexOf(checkedLanguage[0])] = Math.floor(((chartData1[langLabel.indexOf(checkedLanguage[0])] * monthLearningTime /100) + time) * 100 * 10 / monthLearningTime) / 10;
+                for(let i = 0;i < langLabel.length;i++){
+                    if(i == langLabel.indexOf(checkedLanguage[0])){
+                        chartData1[i] = Math.floor(((chartData1[i] * (monthLearningTime - time) /100) + time) * 100 * 10 / monthLearningTime) / 10;
+                    }else{
+                        chartData1[i] = Math.floor((chartData1[i] * (monthLearningTime - time) /100) * 100 * 10 / monthLearningTime) / 10;
+                    }
+                }
             }else{
+                for(let i = 0;i < langLabel.length;i++){
+                    chartData1[i] = Math.floor((chartData1[i] * (monthLearningTime - time) /100) * 100 * 10 / monthLearningTime) / 10;
+                }
                 let color;
                 switch(checkedLanguage[0]){
                     case 'HTML':
@@ -475,8 +497,17 @@ $cont_chart_data = $stmt->fetchAll();
                 }
             }
             if(contLabel.indexOf(checkedContent[0]) != -1){
-                chartData2[contLabel.indexOf(checkedContent[0])] = Math.floor(((chartData2[contLabel.indexOf(checkedContent[0])] * monthLearningTime /100) + time) * 100 * 10 / monthLearningTime) / 10;
+                for(let i = 0;i < contLabel.length;i++){
+                    if(i == contLabel.indexOf(checkedContent[0])){
+                        chartData2[i] = Math.floor(((chartData2[i] * (monthLearningTime - time) /100) + time) * 100 * 10 / monthLearningTime) / 10;
+                    }else{
+                        chartData2[i] = Math.floor((chartData2[i] * (monthLearningTime - time) /100) * 100 * 10 / monthLearningTime) / 10;
+                    }
+                }
             }else{
+                for(let i = 0;i < contLabel.length;i++){
+                    chartData2[i] = Math.floor((chartData2[i] * (monthLearningTime - time) /100) * 100 * 10 / monthLearningTime) / 10;
+                }
                 let color;
                 switch(checkedContent[0]){
                     case 'ドットインストール':
