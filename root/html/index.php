@@ -31,7 +31,7 @@ $stmt->bindParam(':month',$month);
 $stmt->execute();
 $lang_chart_data = $stmt->fetchAll();
 
-$stmt = $dbh->prepare('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=2022 AND MONTH(learning_date)=3 GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
+$stmt = $dbh->prepare('SELECT learning_content, cont_color, SUM(learning_time) AS cont_total_time FROM learning_schedule WHERE YEAR(learning_date)=:year AND MONTH(learning_date)=:month GROUP BY learning_content, cont_color ORDER BY cont_total_time desc');
 $stmt->bindParam(':year',$year);
 $stmt->bindParam(':month',$month);
 $stmt->execute();
@@ -53,9 +53,8 @@ $cont_chart_data = $stmt->fetchAll();
     <link rel="stylesheet" href="./responsive.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    <script type="text/javascript" src="https://github.com/nagix/chartjs-plugin-colorschemes/releases/download/v0.2.0/chartjs-plugin-colorschemes.min.js"></script>
 </head>
-<body style="font-family: Noto Sans Japanese;">
+<body>
     <header>
         <img src="./image/logo.jpg" alt="POSSE" class="logo">
         <p class="subtitle">4th week</p>
@@ -64,22 +63,25 @@ $cont_chart_data = $stmt->fetchAll();
     <main>
         <div class="left-content">
             <div class="time-display">
-                <div class="learning-time"><p><span class="day">Today</span><br><span class="number"><?if($today_time[0]['today_learning_time']){echo $today_time[0]['today_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
+                <div class="learning-time"><p><span class="day">Today</span><br><span class="number" id="today"><?if($today_time[0]['today_learning_time']){echo $today_time[0]['today_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
                 <div class="learning-time"><p><span class="day">Month</span><br><span class="number" id="month"><?if($month_time[0]['month_learning_time']){echo $month_time[0]['month_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
                 <div class="learning-time"><p><span class="day">Total</span><br><span class="number" id="total"><?if($total_time[0]['total_learning_time']){echo $total_time[0]['total_learning_time'];}else{echo 0;}; ?></span><br><span class="hour">hour</span></p></div>
             </div>
-            <div class="graph">
+            <div class="bar-graph">
+                <p>学習時間</p>
                 <canvas id="myBarChart"></canvas>
             </div>
         </div>
         <div class="right-content">
-            <div class="learning-content">
-                <p>学習言語</p>
+            <div class="learning-content" id="learning-lang">
+                <p class="title-of-graph">学習言語</p>
                 <canvas id="myDoughnutChart1"></canvas>
+                <div id="lang-label"></div>
             </div>
-            <div class="learning-content">
-                <p>学習コンテンツ</p>
+            <div class="learning-content" id="learning-cont">
+                <p class="title-of-graph">学習コンテンツ</p>
                 <canvas id="myDoughnutChart2"></canvas>
+                <div id="cont-label"></div>
             </div>
         </div>
         <div class="date"><i class="fas fa-chevron-left left-arrow fa-lg"></i>2022年3月<i class="fas fa-chevron-right right-arrow fa-lg"></i></div>
@@ -205,7 +207,11 @@ $cont_chart_data = $stmt->fetchAll();
         })
 
         // 棒グラフの表示
-        let ctx = document.getElementById("myBarChart");
+        let ctx = document.getElementById("myBarChart").getContext('2d');
+
+        let gradient = ctx.createLinearGradient(0,0,0,600);
+        gradient.addColorStop(0, "#00d2ff");
+        gradient.addColorStop(1, "#928dab");
         //phpでDBから配列を取り出してjsに渡す
         let selectedBarData = <?= json_encode($bar_data); ?>;
         //学習時間の型をstringからnumberに変換
@@ -229,33 +235,43 @@ $cont_chart_data = $stmt->fetchAll();
                 labels: ['','2','','4','','6','','8','','10','','12','','14','','16','','18','','20','','22','','24','','26','','28','','30'],
                 datasets: [
                     {
-                        label: '学習時間', //データ項目のラベル
+                        label: "学習時間",
                         data: barData, //グラフのデータ
+                        backgroundColor: gradient,
+                        borderColor: gradient,
+                        borderWidth: 1,
+                        barThickness: 30,
+                        borderRadius: 5,
+                        hoverBackgroundColor: gradient,
+                        hoverBorderColor: gradient,
                     }
                 ],
             },
             options: {
+                legend: {
+                    display:false
+                },
                 scales: {
-                xAxes: [{
-                    display: true,
-                    stacked: false,
-                    gridLines: {
-                    display: false
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        suggestedMax: 12, //最大値
-                        suggestedMin: 0, //最小値
-                        stepSize: 2, //縦ラベルの数値単位
-                        callback: function(tick){
-                            return tick.toString() + 'h';
-                        }
-                    },
-                    gridLines: {
+                    xAxes: [{
+                        display: true,
+                        stacked: false,
+                        gridLines: {
                         display: false
-                    }
-                }],
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            suggestedMax: 12, //最大値
+                            suggestedMin: 0, //最小値
+                            stepSize: 2, //縦ラベルの数値単位
+                            callback: function(tick){
+                                return tick.toString() + 'h';
+                            }
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
                 },
             },
             });
@@ -308,10 +324,21 @@ $cont_chart_data = $stmt->fetchAll();
         for(let i = 0;i < chartData1.length;i++){
             chartData1[i] = 0;
         }
+
         selectedChartData1.forEach(data => {
             backgroundColorDataForLang.push(data['lang_color']);
             langLabel.push(data['learning_language']);
             chartData1.push(Math.floor(Number(data['lang_total_time']) * 100 * 10 / monthLearningTime) / 10);
+            // let label = document.getElementById("lang-label");
+            // label.classList.add("label-position");
+            // let div = document.createElement("div");
+            // div.classList.add("circle");
+            // div.backgroundColor = data['lang_color'];
+            // label.appendChild(div);
+            // let p = document.createElement("p");
+            // p.style.fontSize = 5;
+            // p.textContent = data['learning_language'];
+            // label.appendChild(p);
         })
         function showDoughnutChart1(){
             let myDoughnutChart1= new Chart(chart1, {
@@ -328,7 +355,8 @@ $cont_chart_data = $stmt->fetchAll();
                 cutoutPercentage: 45,
                 maintainAspectRatio: false,
                 legend:{
-                    position: "bottom"
+                    position: "bottom",
+                    // display: false,
                 },
                 tooltips: {
                 callbacks: {
@@ -378,6 +406,7 @@ $cont_chart_data = $stmt->fetchAll();
                 maintainAspectRatio: false,
                 legend:{
                     position: "bottom",
+                    // display: false,
                 },
                 tooltips: {
                 callbacks: {
@@ -526,8 +555,30 @@ $cont_chart_data = $stmt->fetchAll();
             }
             setTimeout(showDoughnutChart2,5000);
 
+            let date = new Date();
+            let thisYear = date.getFullYear();
+            console.log(thisYear);
+            let thisMonth;
+            if(date.getMonth()+1 > 0 && date.getMonth()+1 < 10){
+                thisMonth = '0' + `${date.getMonth() + 1}`;
+            }else{
+                thisMonth = date.getMonth() + 1;
+            }
+            console.log(thisMonth);
+            let thisDay;
+            if(date.getDate() > 0 && date.getDate() < 10){
+                thisDay = '0' + `${date.getDate()}`;
+            }else{
+                thisDay = date.getDate();
+            }
+            console.log(thisDay);
             setTimeout(() => {
                 document.getElementById('check-mark').style.display = 'none';
+                if(chosenCalender.value == `${thisYear}年${thisMonth}月${thisDay}日`){
+                    document.getElementById("today").textContent = Number(document.getElementById("today").textContent) + time;
+                }
+                document.getElementById("month").textContent = monthLearningTime;
+                document.getElementById("total").textContent = totalLearningTime;
                 chosenCalender.value = '';
                 for(let i = 0;i < language.length;i++){
                     language[i].checked = false;
@@ -536,8 +587,6 @@ $cont_chart_data = $stmt->fetchAll();
                     content[i].checked = false;
                 }
                 document.getElementById("time").value = '';
-                document.getElementById("month").textContent = monthLearningTime;
-                document.getElementById("total").textContent = totalLearningTime;
             },5000);
         })
 

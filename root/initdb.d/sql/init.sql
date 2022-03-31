@@ -30,4 +30,5 @@ INSERT INTO learning_schedule (learning_date,learning_time,learning_language,lan
 ('2022-03-06',5,'SHELL','#4609E8','ドットインストール','#0042E5'),
 ('2022-03-14',6,'SQL','#6C43E5','N予備校','#0070B9'),
 ('2022-03-20',2,'CSS','#0070B9','POSSE課題','#00BDDB'),
+('2022-03-26',3,'SHELL','#4609E8','N予備校','#0070B9'),
 ('2022-03-28',5,'JavaScript','#00BDDB','POSSE課題','#00BDDB');

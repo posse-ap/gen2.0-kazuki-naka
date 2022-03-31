@@ -24,9 +24,16 @@
     display: none;
   }
   .left-content{
-    margin: 0;
+    max-width: 90%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%,0);
   }
   .right-content{
-    margin: 0;
+    max-width: 90%;
+    position: relative;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%,0);
   }
 }
